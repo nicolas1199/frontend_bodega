@@ -23,13 +23,6 @@ api.interceptors.request.use(
 )
 
 export const authService = {
-    login: (username, password) => api.post('/login', { username, password }),
+    login: (mail, clave) => api.post('/login', { mail, clave }),
     logout: () => api.post('/logout'),
 }
-
-export const userService = {
-    getProfile: () => api.get('/profile'),
-    updateProfile: (userData) => api.put('/profile', userData),
-}
-
-export default api
