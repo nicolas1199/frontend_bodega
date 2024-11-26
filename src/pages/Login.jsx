@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authService } from '../services/api.js'
+import './login.css'
 
 const Login = () => {
     const [mail, setEmail] = useState('')
@@ -12,7 +13,7 @@ const Login = () => {
         e.preventDefault()
         setError('')
         try {
-            const response = await authService.login(mail, clave)
+            const [response] = await authService.login(mail, clave)
             console.log('Login successful:', response.data)
             localStorage.setItem('token', response.data.token)
             navigate('/')
@@ -26,36 +27,34 @@ const Login = () => {
 
     return (
         <div className="container mt-5">
-            <div className="card">
+            <div className="card login">
                 <div className="card-body">
-                    <h1 className="card-title text-center">Iniciar sesión</h1>
+                    <h1 className="card-title text-center">Iniciar sesión</h1> <hr />
                     {error && <div className="alert alert-danger">{error}</div>}
                     <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="email" className="form-label">
-                                Email:
-                            </label>
+                        <div className="form-floating mb-3">
                             <input
-                                type="text"
+                                type="email"
                                 className="form-control"
-                                id="email"
+                                name='mail'
+                                id="mail"
                                 value={mail}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
+                            <label htmlFor="mail">Mail*</label>
                         </div>
-                        <div className="mb-3">
-                            <label htmlFor="password" className="form-label">
-                                Contraseña:
-                            </label>
+                        <div className="form-floating mb-3">
                             <input
                                 type="password"
                                 className="form-control"
-                                id="password"
+                                name='clave'
+                                id="clave"
                                 value={clave}
                                 onChange={(e) => setClave(e.target.value)}
                                 required
                             />
+                            <label htmlFor="clave">Contraseña*</label>
                         </div>
                         <div className="d-grid">
                             <button type="submit" className="btn btn-primary">
@@ -68,6 +67,7 @@ const Login = () => {
                             Volver a Inicio
                         </Link>
                     </div>
+
                 </div>
             </div>
         </div>
