@@ -13,10 +13,12 @@ const Login = () => {
         e.preventDefault()
         setError('')
         try {
-            const [response] = await authService.login(mail, clave)
+            const response = await authService.login(mail, clave)
+            console.log('Llegó');
+            
             console.log('Login successful:', response.data)
             localStorage.setItem('token', response.data.token)
-            navigate('/')
+            navigate('/materiales')
         } catch (err) {
             setError(
                 'Error al iniciar sesión. Por favor, verifica tus credenciales.'
@@ -29,7 +31,7 @@ const Login = () => {
         <div className="container mt-5">
             <div className="card login">
                 <div className="card-body">
-                    <h1 className="card-title text-center">Iniciar sesión</h1> <hr />
+                    <h1 className="card-title text-center">Iniciar Sesión</h1> <hr />
                     {error && <div className="alert alert-danger">{error}</div>}
                     <form onSubmit={handleSubmit}>
                         <div className="form-floating mb-3">
@@ -58,7 +60,7 @@ const Login = () => {
                         </div>
                         <div className="d-grid">
                             <button type="submit" className="btn btn-primary">
-                                Iniciar sesión
+                                Iniciar Sesión
                             </button>
                         </div>
                     </form>
