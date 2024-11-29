@@ -16,6 +16,7 @@ export const authService = {
 export const logedService = {
     getData: () => api.get('/loged/materiales'),
 }
+
 export const cartService = {
     create: (material, rut) =>
         api.get(
@@ -30,6 +31,15 @@ export const cartService = {
 }
 export const matService = {
     create: (material) => api.post(`materiales/create`, material),
+    getAll: () => api.get('/loged/materiales'),
     update: (id, nuevo) => api.get((`materiales/update/?`, [id]), nuevo),
     delete: (id) => api.delete((`materiales/?`, [id])),
 }
+
+export const categoriaService = {
+    create: (categoria) => api.post('loged/categorias/create', categoria),
+    getAll: () => api.get('/loged/categorias'),
+    update: (id, nuevo) => api.get((`loged/categorias/update/?`, [id]), nuevo),
+    delete: (id) => api.delete((`loged/categorias/?`, [id])),
+}
+export default api

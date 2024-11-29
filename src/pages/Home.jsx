@@ -4,19 +4,22 @@ import { Link } from 'react-router-dom'
 const Home = () => {
     return (
         <div className="container mt-5">
-            <div className="card">
-                <div className="card-body">
-                    <h1 className="card-title text-center">
-                        Bienvenido a la página de inicio
-                    </h1>
-                    <p className="card-text text-center">
-                        Esta es la página principal de nuestra aplicación.
-                    </p>
-                    <div className="d-flex justify-content-center">
-                        <Link to="/login" className="btn btn-primary me-2">
-                            Ir a Login
-                        </Link>
-                    </div>
+            <div className="jumbotron">
+                <h1 className="display-4">
+                    Bienvenido al Sistema de Manejo de Inventario de Bodega
+                </h1>
+                <p className="lead">
+                    Gestiona tus materiales y usuarios de manera eficiente.
+                </p>
+                <hr className="my-4" />
+                <p>Selecciona una de las siguientes opciones para comenzar:</p>
+                <div className="d-flex gap-2">
+                    <Link to="/materiales" className="btn btn-primary btn-lg">
+                        Gestionar Materiales
+                    </Link>
+                    <Link to="/usuarios" className="btn btn-secondary btn-lg">
+                        Gestionar Usuarios
+                    </Link>
                 </div>
             </div>
         </div>
