@@ -74,18 +74,12 @@ const Materiales = () => {
             material.precio_compra,
             material.precio_venta,
             material.id_categoria,
-            <div key={material.id_material}>
-                <button
-                    onClick={() => handleDelete(material.id_material)}
-                    key={material.id_material}
-                >
+            <div>
+                <button onClick={() => handleDelete(material.id_material)}>
                     Eliminar
                 </button>
 
-                <button
-                    onClick={() => handleUpdate(material.id_material)}
-                    key={material.id_material}
-                >
+                <button onClick={() => handleUpdate(material.id_material)}>
                     Editar
                 </button>
             </div>,
@@ -127,10 +121,7 @@ const Materiales = () => {
                 <select name="id_categoria" onChange={handleChange}>
                     <option value="">Seleccione una categoria</option>
                     {categorias.map((categoria) => (
-                        <option
-                            key={categoria.id_categoria}
-                            value={categoria.id_categoria}
-                        >
+                        <option value={categoria.id_categoria}>
                             {categoria.nombre_categoria}
                         </option>
                     ))}
