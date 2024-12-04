@@ -1,464 +1,163 @@
-import React, { useEffect, useState } from "react"
-import Barra from "./partials/_navbar.jsx"
-import './general.css'
-import { cartService, logedService, matService } from "../services/api.js"
-import { Route, Routes } from "react-router-dom"
+import React, { act, useEffect, useState } from 'react'
+import { matService } from '../services/api.js'
+import { categoriaService } from '../services/api.js'
+import DataTable from 'datatables.net-react'
+import DT from 'datatables.net-bs5'
+import './Materiales.css'
+
+DataTable.use(DT)
 
 const Materiales = () => {
-
-    const [materiales, setMateriales] = useState([]);
-    const [categorias, setCategorias] = useState([]);
-    const [ingresado, setIngresado] = useState([]);
-    const [id_material, setId_Material] = useState('');
-    const [id_categoria, setIdCategoria] = useState('')
-    const [nombre_material, setNombre] = useState('');
-    const [precio_venta, setPrecioVenta] = useState('');
-    const [precio_compra, setPrecioCompra] = useState('');
-    const [inventario, setInventario] = useState('');
-    const [cantidad, setCantidad] = useState('');
+    const [materiales, setMateriales] = useState([])
+    const [categorias, setCategorias] = useState([])
+    const [newMaterial, setNewMaterial] = useState({
+        nombre: '',
+        inventario: '',
+        precio_compra: '',
+        precio_venta: '',
+        id_categoria: '',
+    })
 
     useEffect(() => {
-        extraer()
-    })
-    const extraer = async () => {
-        try {
-            const res = await logedService.getData()
-            setMateriales(res.data.materiales)
-            setCategorias(res.data.categorias)
-            setIngresado(res.data.persona)
+        matService.getAll().then((res) => setMateriales(res))
+        categoriaService.getAll().then((res) => setCategorias(res.data))
+    }, [])
 
-        } catch (error) {
-            console.error(error);
-        }
-
+    const handleChange = (e) => {
+        setNewMaterial({
+            ...newMaterial,
+            [e.target.name]: e.target.value,
+        })
     }
-    const addCarrito = async (mat) => {
 
-        try {
-            const response = await cartService.create({ mat, cantidad }, ingresado.rut)
-            console.log('Llegó');
-
-            console.log('Agregado con éxito:', response.data)
-            localStorage.setItem('token', response.data.token)
-
-        } catch (err) {
-
-            console.error('Login error:', err)
-        }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        matService.create(newMaterial).then((res) => {
+            setMateriales([...materiales, res.data])
+            setNewMaterial({
+                nombre_material: '',
+                inventario: '',
+                precio_compra: '',
+                precio_venta: '',
+                id_categoria: '',
+            })
+        })
     }
-    const addMaterial = async () => {
-        try {
-            const res = await matService.create({ nombre_material, id_categoria, precio_venta, precio_compra, inventario })
 
-        } catch (error) {
-            console.error(error);
-
-        }
+    const handleDelete = (id) => {
+        matService.delete(id).then(() => {
+            setMateriales(
+                materiales.filter((material) => material.id_material !== id)
+            )
+        })
     }
-    const deleteMat = (id) => {
-        try {
-            const response = matService.delete(id_material)
-            console.log("Eliminado", response.data);
 
-        } catch (error) {
-            console.error(error);
-
-        }
+    const handleUpdate = (id) => {
+        matService.update(id, newMaterial).then((res) => {
+            setMateriales(
+                materiales.map((material) =>
+                    material.id_material === id ? res.data : material
+                )
+            )
+        })
     }
-    const addMat = () => {
-        return (
-            <div data-addMat id='addMat' className="add">
-                <form id="agregar" onSubmit={() => addMaterial()}>
-                    <div className="form-floating mb-3">
-                        <input
-                            type="text"
-                            className="form-control"
-                            name='nombre_material'
-                            id="nombre_material"
-                            onChange={(e) => setNombre(e.target.value)}
-                            required
 
-                        />
-                        <label htmlFor="nombre_material">Nombre</label>
-                    </div>
-                    <label htmlFor="id_categoria">Categoría</label>
-                    <div className="form-floating mb-3">
-                        <div>
+    function formatMateriales(data) {
+        if (!data) return []
+        const materiales = data
 
-                            <select className="form-select" id="id_categoria"
-                                onChange={(e) => setIdCategoria(e.target.value)}>
-                                {categorias.map((cat) => (
-                                    <option value={cat.id_categoria}> {cat.nombre_categoria}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <input
-                            type="text"
-                            className="form-control"
-                            name='precio_compra'
-                            id="precio_compra"
-                            onChange={(e) => setPrecioCompra(e.target.value)}
-                            required
+        if (!materiales.data) return []
 
-                        />
-                        <label htmlFor="precio_compra">Precio Compra</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <input
-                            type="number"
-                            className="form-control"
-                            name='precio_venta'
-                            id="precio_venta"
-                            onChange={(e) => setPrecioVenta(e.target.value)}
-                            required
+        return materiales.data.map((material) => [
+            material.nombre_material,
+            material.inventario,
+            material.precio_compra,
+            material.precio_venta,
+            material.id_categoria,
+            <div key={material.id_material}>
+                <button
+                    onClick={() => handleDelete(material.id_material)}
+                    key={material.id_material}
+                >
+                    Eliminar
+                </button>
 
-                        />
-                        <label htmlFor="precio_venta">Precio Venta</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                        <input
-                            type="text"
-                            className="form-control"
-                            name='inventario'
-                            id="inventario"
-                            onChange={(e) => setInventario(e.target.value)}
-                            required
-
-                        />
-                        <label htmlFor="inventario">Unidades Disponibles</label>
-                    </div>
-                    <hr />
-
-
-
-                    <br />
-                    <button type="submit" className="btn btn-primary form-control">Confirmar</button>
-                    <button onClick={() => ocultar()} type="button" className="btn btn-danger form-control">Close</button>
-
-                </form>
-            </div>
-        )
+                <button
+                    onClick={() => handleUpdate(material.id_material)}
+                    key={material.id_material}
+                >
+                    Editar
+                </button>
+            </div>,
+        ])
     }
     const editMaterial=(id)=>{
 
-    }
-    const acciones = (mat) => {
-        return (
-            <div>
-                <div data-addCarrito id={"agregar_carrito-" + mat.id_material} className="add">
-
-                    <div className="modal-content">
-
-                        <div className="modal-body">
-                            <form id="agregar" onSubmit={() => addCarrito(mat.id_material, mat.precio_venta)}>
-                                <div className="form-floating mb-3">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name='id_material'
-                                        id="id_material"
-                                        value={mat.id_material}
-                                        required
-                                        disabled
-                                    />
-                                    <label htmlFor="mail">ID</label>
-                                </div>
-                                <div className="form-floating mb-3">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name='nombre_material'
-                                        id="nombre_material"
-                                        value={mat.nombre_material}
-                                        required
-                                        disabled
-                                    />
-                                    <label htmlFor="mail">Nombre</label>
-                                </div>
-                                <div className="form-floating mb-3">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name='nombre_categoria'
-                                        id="nombre_categoria"
-                                        value={mat.nombre_categoria}
-                                        required
-                                        disabled
-                                    />
-                                    <label htmlFor="mail">Categoría</label>
-                                </div>
-                                <div className="form-floating mb-3">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name='precio_venta'
-                                        id="precio_venta"
-                                        value={mat.precio_venta}
-                                        required
-                                        disabled
-                                    />
-                                    <label htmlFor="mail">Precio de Venta</label>
-                                </div>
-                                <div className="form-floating mb-3">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name='inventario'
-                                        id="inventario"
-                                        value={mat.inventario}
-                                        required
-                                        disabled
-                                    />
-                                    <label htmlFor="mail">Unidades Disponibles</label>
-                                </div>
-                                <hr />
-
-                                <div className="form-group">
-                                    Unidades a Agregar:<br />
-                                    <input type="number" name="cantidad" id="cantidad" min="1" max={mat.inventario}
-                                        onChange={(e) => setCantidad(e.target.value)} />
-                                </div>
-
-                                <br />
-                                <button type="submit" className="btn btn-primary form-control">Confirmar</button>
-                                <button onClick={() => ocultar()} type="button" className="btn btn-danger form-control">Close</button>
-
-                            </form>
-
-                        </div>
-
-                    </div>
-
-                </div>
-                <div data-editMat id={"editar-" + mat.id_material} className="edit">
-                    <form id="agregar" onSubmit={() => editMaterial()}>
-                        <div className="form-floating mb-3">
-                            <input
-                                type="text"
-                                className="form-control"
-                                name='id_material'
-                                id="id_material"
-                                value={mat.id_material}
-                                required
-                                disabled
-                            />
-                            <label htmlFor="mail">ID</label>
-                        </div>
-                        <div className="form-floating mb-3">
-                            <input
-                                type="text"
-                                className="form-control"
-                                name='nombre_material'
-                                id="nombre_material"
-                                value={mat.nombre_material}
-                                onChange={(e) => setNombre(e.target.value)}
-                                required
-
-                            />
-                            <label htmlFor="mail">Nombre</label>
-                        </div>
-                        <div className="form-floating mb-3">
-                            <input
-                                type="text"
-                                className="form-control"
-                                name='nombre_categoria'
-                                id="nombre_categoria"
-                                value={mat.nombre_categoria}
-                                onChange={(e) => set}
-                                required
-
-                            />
-                            <label htmlFor="mail">Categoría</label>
-                        </div>
-                        <div className="form-floating mb-3">
-                            <input
-                                type="text"
-                                className="form-control"
-                                name='precio_compra'
-                                id="precio_compra"
-                                value={mat.precio_compra}
-                                onChange={(e) => setPrecioCompra(e.target.value)}
-                                required
-
-                            />
-                            <label htmlFor="precio_compra">Precio de Venta</label>
-                        </div>
-                        <div className="form-floating mb-3">
-                            <input
-                                type="text"
-                                className="form-control"
-                                name='precio_venta'
-                                id="precio_venta"
-                                value={mat.precio_venta}
-                                onChange={(e) => setPrecioVenta(e.target.value)}
-                                required
-
-                            />
-                            <label htmlFor="precio_venta">Precio de Venta</label>
-                        </div>
-                        <div className="form-floating mb-3">
-                            <input
-                                type="text"
-                                className="form-control"
-                                name='inventario'
-                                id="inventario"
-                                value={mat.inventario}
-                                onChange={(e) => setCantidad}
-                                required
-
-                            />
-                            <label htmlFor="inventario">Unidades Disponibles</label>
-                        </div>
-                        <hr />
-
-                        <div className="form-group">
-                            Unidades a Agregar:<br />
-                            <input type="number" name="cantidad" id="cantidad" min="1" max={mat.inventario}
-                                onChange={(e) => setCantidad(e.target.value)} />
-                        </div>
-
-                        <br />
-                        <button type="submit" className="btn btn-primary form-control">Confirmar</button>
-                        <button onClick={() => ocultar()} type="button" className="btn btn-danger form-control">Close</button>
-
-                    </form>
-                </div>
-            </div>
-        )
-    }
-
     return (
         <div>
-            <Barra />
-            <hr />
-            <div className="loged">
-                <div className="tittle">
-                    <h1>MATERIALES</h1>
-                </div>
-                <div>
-                    <button onClick={() => { showAddMat() }} data-target='#addMat' className="btn btn-success" id="btn-addMat">Agregar</button>
-                </div>
-                <br />
-                {addMat(categorias)}
-                {materiales.map(mat => (
-                    acciones(mat)
-                ))}
-                <table data-content className="table table-bordered table-hover">
-                    <thead >
-                        <tr className="table-dark">
-                            <th>Id</th>
-                            <th>Nombre</th>
-                            <th>Categoria</th>
-                            <th>Precio</th>
-                            <th>Unidades <br /> Disponibles</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {materiales.map((mat) => (
-                            filas(mat)
-                        ))}
-                    </tbody>
-                    <tfoot>
-                        <tr className="table-dark">
-                            <th>Id</th>
-                            <th>Nombre</th>
-                            <th>Tipo</th>
-                            <th>Precio</th>
-                            <th>Unidades Disponibles</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+            <h1>Materiales</h1>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="nombre_material"
+                    value={newMaterial.nombre_material}
+                    onChange={handleChange}
+                    placeholder="Nombre"
+                />
+                <input
+                    type="number"
+                    name="inventario"
+                    value={newMaterial.inventario}
+                    onChange={handleChange}
+                    placeholder="Stock"
+                />
+                <input
+                    type="number"
+                    name="precio_compra"
+                    value={newMaterial.precio_compra}
+                    onChange={handleChange}
+                    placeholder="Precio de compra"
+                />
+                <input
+                    type="number"
+                    name="precio_venta"
+                    value={newMaterial.precio_venta}
+                    onChange={handleChange}
+                    placeholder="Precio de venta"
+                />
+                <select name="id_categoria" onChange={handleChange}>
+                    <option value="">Seleccione una categoria</option>
+                    {categorias.map((categoria) => (
+                        <option
+                            key={categoria.id_categoria}
+                            value={categoria.id_categoria}
+                        >
+                            {categoria.nombre_categoria}
+                        </option>
+                    ))}
+                </select>
+                <button type="submit">Agregar</button>
+            </form>
+
+            <DataTable
+                data={formatMateriales(materiales)}
+                className="table table-striped"
+                options={{
+                    columns: [
+                        { title: 'Nombre' },
+                        { title: 'Stock' },
+                        { title: 'Precio de compra' },
+                        { title: 'Precio de venta' },
+                        { title: 'Categoria' },
+                        { title: 'Acciones', orderable: false },
+                    ],
+                }}
+                slots={{
+                    5: (row) => <td>{row}</td>,
+                }}
+            ></DataTable>
         </div>
     )
 }
 
-
-
-const filas = (mat) => {
-    return (
-        <tr className="table-secondary" key={mat.id_material}>
-            <td>{mat.id_material}</td>
-            <td>{mat.nombre_material}</td>
-            <td>{mat.nombre_categoria}</td>
-            <td>${mat.precio_venta}</td>
-            <td>
-                <span className="badge bg-primary rounded-pill">
-                    {mat.inventario}
-                </span>
-            </td>
-            <td>
-                <div className="accordion" id={"acordion_" + mat.id_material}>
-                    <div className="accordion-item">
-                        <h2 className="accordion-header" id={"heading_" + mat.id_material}>
-                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={"#collapse_" + mat.id_material} aria-expanded="false" aria-controls={"collapse_" + mat.id_material}>Acciones</button>
-                        </h2>
-                        <div id={"collapse_" + mat.id_material} className="accordion-collapse collapse" aria-labelledby={"heading_" + mat.id_material} data-bs-parent={"#acordion_" + mat.id_material}>
-                            <div className="accordion-body">
-                                <button data-target={"#editar-" + mat.id_material}
-                                onClick={()=>showEdit(mat)}
-                                 className="btn btn-primary form-control"
-                                 id={"btn-edit-"+mat.id_material} >Editar</button>
-
-                                <button onClick={() => {
-                                    setId_Material(mat.id_material),
-                                    deleteMat()}}
-                                    className="btn btn-danger form-control">Eliminar</button>
-                                {/** Modificar para que tambien haya un boton de ver en el carrito si ya está */}
-                                <button data-target={"#agregar_carrito-" + mat.id_material} onClick={() => showAddCarrito(mat)} className="btn btn-secondary form-control bi bi-cart-plus" id={"btn_addCarrito_" + mat.id_material}>
-                                    Añadir</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </td>
-
-        </tr>
-    )
-}
-
-
-
-async function showAddCarrito(mat) {
-    ocultar()
-    const target = document.getElementById("btn_addCarrito_" + mat.id_material);
-    const t = document.querySelector(target.dataset.target)
-
-    
-
-    //mostrar el correspondiente
-    t.classList.add('active')
-
-}
-async function showAddMat() {
-    ocultar()
-    const target = document.getElementById('btn-addMat')
-    const add = document.querySelector(target.dataset.target)
-
-    add.classList.add('active');
-}
-async function ocultar() {
-    document.querySelectorAll('[data-addCarrito]').forEach((add) => {
-        add.classList.remove('active');
-    })
-    const add = document.getElementById('btn-addMat')
-    const target = document.querySelector(add.dataset.target)
-    target.classList.remove('active');
-
-    const edit = document.querySelectorAll("[data-editMat]").forEach((e)=>{
-        e.classList.remove('active');
-    })
-}
-async function showEdit(mat) {
-    ocultar()
-    const target = document.getElementById("btn-edit-"+mat.id_material)
-    const t = document.querySelector(target.dataset.target)
-
-    t.classList.add('active');
-}
 export default Materiales
