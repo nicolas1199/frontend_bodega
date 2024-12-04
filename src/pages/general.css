@@ -17,7 +17,7 @@ nav,
 }
 
 
-.add{
+.add, .edit{
     padding: 2.5%;
     text-align: center;
     position: fixed;
@@ -29,11 +29,11 @@ nav,
     color: black;
     
 }
-[data-addCarrito], [data-addMat]{
+[data-addCarrito], [data-addMat], [data-editMat]{
     display: none;
 }
 
 
-.active[data-addCarrito], .active[data-addMat]{
+.active[data-addCarrito], .active[data-addMat], .active[data-editMat]{
     display: block;
 }

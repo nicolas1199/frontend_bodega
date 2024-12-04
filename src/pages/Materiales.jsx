@@ -14,6 +14,7 @@ const Materiales = () => {
     const [nombre_material, setNombre] = useState('');
     const [precio_venta, setPrecioVenta] = useState('');
     const [precio_compra, setPrecioCompra] = useState('');
+    const [inventario, setInventario] = useState('');
     const [cantidad, setCantidad] = useState('');
 
     useEffect(() => {
@@ -47,7 +48,17 @@ const Materiales = () => {
     }
     const addMaterial = async () => {
         try {
-            const res = await matService.create({ nombre_material, id_categoria, precio_venta, precio_compra, cantidad })
+            const res = await matService.create({ nombre_material, id_categoria, precio_venta, precio_compra, inventario })
+
+        } catch (error) {
+            console.error(error);
+
+        }
+    }
+    const deleteMat = (id) => {
+        try {
+            const response = matService.delete(id_material)
+            console.log("Eliminado", response.data);
 
         } catch (error) {
             console.error(error);
@@ -112,7 +123,7 @@ const Materiales = () => {
                             className="form-control"
                             name='inventario'
                             id="inventario"
-                            onChange={(e) => setCantidad(e.target.value)}
+                            onChange={(e) => setInventario(e.target.value)}
                             required
 
                         />
@@ -127,6 +138,193 @@ const Materiales = () => {
                     <button onClick={() => ocultar()} type="button" className="btn btn-danger form-control">Close</button>
 
                 </form>
+            </div>
+        )
+    }
+    const editMaterial=(id)=>{
+
+    }
+    const acciones = (mat) => {
+        return (
+            <div>
+                <div data-addCarrito id={"agregar_carrito-" + mat.id_material} className="add">
+
+                    <div className="modal-content">
+
+                        <div className="modal-body">
+                            <form id="agregar" onSubmit={() => addCarrito(mat.id_material, mat.precio_venta)}>
+                                <div className="form-floating mb-3">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name='id_material'
+                                        id="id_material"
+                                        value={mat.id_material}
+                                        required
+                                        disabled
+                                    />
+                                    <label htmlFor="mail">ID</label>
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name='nombre_material'
+                                        id="nombre_material"
+                                        value={mat.nombre_material}
+                                        required
+                                        disabled
+                                    />
+                                    <label htmlFor="mail">Nombre</label>
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name='nombre_categoria'
+                                        id="nombre_categoria"
+                                        value={mat.nombre_categoria}
+                                        required
+                                        disabled
+                                    />
+                                    <label htmlFor="mail">Categoría</label>
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name='precio_venta'
+                                        id="precio_venta"
+                                        value={mat.precio_venta}
+                                        required
+                                        disabled
+                                    />
+                                    <label htmlFor="mail">Precio de Venta</label>
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name='inventario'
+                                        id="inventario"
+                                        value={mat.inventario}
+                                        required
+                                        disabled
+                                    />
+                                    <label htmlFor="mail">Unidades Disponibles</label>
+                                </div>
+                                <hr />
+
+                                <div className="form-group">
+                                    Unidades a Agregar:<br />
+                                    <input type="number" name="cantidad" id="cantidad" min="1" max={mat.inventario}
+                                        onChange={(e) => setCantidad(e.target.value)} />
+                                </div>
+
+                                <br />
+                                <button type="submit" className="btn btn-primary form-control">Confirmar</button>
+                                <button onClick={() => ocultar()} type="button" className="btn btn-danger form-control">Close</button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div data-editMat id={"editar-" + mat.id_material} className="edit">
+                    <form id="agregar" onSubmit={() => editMaterial()}>
+                        <div className="form-floating mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name='id_material'
+                                id="id_material"
+                                value={mat.id_material}
+                                required
+                                disabled
+                            />
+                            <label htmlFor="mail">ID</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name='nombre_material'
+                                id="nombre_material"
+                                value={mat.nombre_material}
+                                onChange={(e) => setNombre(e.target.value)}
+                                required
+
+                            />
+                            <label htmlFor="mail">Nombre</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name='nombre_categoria'
+                                id="nombre_categoria"
+                                value={mat.nombre_categoria}
+                                onChange={(e) => set}
+                                required
+
+                            />
+                            <label htmlFor="mail">Categoría</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name='precio_compra'
+                                id="precio_compra"
+                                value={mat.precio_compra}
+                                onChange={(e) => setPrecioCompra(e.target.value)}
+                                required
+
+                            />
+                            <label htmlFor="precio_compra">Precio de Venta</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name='precio_venta'
+                                id="precio_venta"
+                                value={mat.precio_venta}
+                                onChange={(e) => setPrecioVenta(e.target.value)}
+                                required
+
+                            />
+                            <label htmlFor="precio_venta">Precio de Venta</label>
+                        </div>
+                        <div className="form-floating mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name='inventario'
+                                id="inventario"
+                                value={mat.inventario}
+                                onChange={(e) => setCantidad}
+                                required
+
+                            />
+                            <label htmlFor="inventario">Unidades Disponibles</label>
+                        </div>
+                        <hr />
+
+                        <div className="form-group">
+                            Unidades a Agregar:<br />
+                            <input type="number" name="cantidad" id="cantidad" min="1" max={mat.inventario}
+                                onChange={(e) => setCantidad(e.target.value)} />
+                        </div>
+
+                        <br />
+                        <button type="submit" className="btn btn-primary form-control">Confirmar</button>
+                        <button onClick={() => ocultar()} type="button" className="btn btn-danger form-control">Close</button>
+
+                    </form>
+                </div>
             </div>
         )
     }
@@ -145,94 +343,9 @@ const Materiales = () => {
                 <br />
                 {addMat(categorias)}
                 {materiales.map(mat => (
-
-                    <div data-addCarrito id={"agregar_carrito-" + mat.id_material} className="add">
-
-                        <div className="modal-content">
-
-                            <div className="modal-body">
-                                <form id="agregar" onSubmit={() => addCarrito(mat.id_material, mat.precio_venta)}>
-                                    <div className="form-floating mb-3">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            name='id_material'
-                                            id="id_material"
-                                            value={mat.id_material}
-                                            required
-                                            disabled
-                                        />
-                                        <label htmlFor="mail">ID</label>
-                                    </div>
-                                    <div className="form-floating mb-3">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            name='nombre_material'
-                                            id="nombre_material"
-                                            value={mat.nombre_material}
-                                            required
-                                            disabled
-                                        />
-                                        <label htmlFor="mail">Nombre</label>
-                                    </div>
-                                    <div className="form-floating mb-3">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            name='nombre_categoria'
-                                            id="nombre_categoria"
-                                            value={mat.nombre_categoria}
-                                            required
-                                            disabled
-                                        />
-                                        <label htmlFor="mail">Categoría</label>
-                                    </div>
-                                    <div className="form-floating mb-3">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            name='precio_venta'
-                                            id="precio_venta"
-                                            value={mat.precio_venta}
-                                            required
-                                            disabled
-                                        />
-                                        <label htmlFor="mail">Precio de Venta</label>
-                                    </div>
-                                    <div className="form-floating mb-3">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            name='inventario'
-                                            id="inventario"
-                                            value={mat.inventario}
-                                            required
-                                            disabled
-                                        />
-                                        <label htmlFor="mail">Unidades Disponibles</label>
-                                    </div>
-                                    <hr />
-
-                                    <div className="form-group">
-                                        Unidades a Agregar:<br />
-                                        <input type="number" name="cantidad" id="cantidad" min="1" max={mat.inventario}
-                                            onChange={(e) => setCantidad(e.target.value)} />
-                                    </div>
-
-                                    <br />
-                                    <button type="submit" className="btn btn-primary form-control">Confirmar</button>
-                                    <button onClick={() => ocultar()} type="button" className="btn btn-danger form-control">Close</button>
-
-                                </form>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                    acciones(mat)
                 ))}
-                <table data-content className="table table-bordered table-hover active">
+                <table data-content className="table table-bordered table-hover">
                     <thead >
                         <tr className="table-dark">
                             <th>Id</th>
@@ -286,8 +399,15 @@ const filas = (mat) => {
                         </h2>
                         <div id={"collapse_" + mat.id_material} className="accordion-collapse collapse" aria-labelledby={"heading_" + mat.id_material} data-bs-parent={"#acordion_" + mat.id_material}>
                             <div className="accordion-body">
-                                <a className="btn btn-primary form-control" href="/">Editar</a>
-                                <a className="btn btn-danger form-control" href="/">Eliminar</a>
+                                <button data-target={"#editar-" + mat.id_material}
+                                onClick={()=>showEdit(mat)}
+                                 className="btn btn-primary form-control"
+                                 id={"btn-edit-"+mat.id_material} >Editar</button>
+
+                                <button onClick={() => {
+                                    setId_Material(mat.id_material),
+                                    deleteMat()}}
+                                    className="btn btn-danger form-control">Eliminar</button>
                                 {/** Modificar para que tambien haya un boton de ver en el carrito si ya está */}
                                 <button data-target={"#agregar_carrito-" + mat.id_material} onClick={() => showAddCarrito(mat)} className="btn btn-secondary form-control bi bi-cart-plus" id={"btn_addCarrito_" + mat.id_material}>
                                     Añadir</button>
@@ -309,16 +429,13 @@ async function showAddCarrito(mat) {
     const target = document.getElementById("btn_addCarrito_" + mat.id_material);
     const t = document.querySelector(target.dataset.target)
 
-    //ocultar todos
-    document.querySelectorAll('[data-addCarrito]').forEach((add) => {
-        add.classList.remove('active')
-    })
+    
 
     //mostrar el correspondiente
     t.classList.add('active')
 
 }
-function showAddMat() {
+async function showAddMat() {
     ocultar()
     const target = document.getElementById('btn-addMat')
     const add = document.querySelector(target.dataset.target)
@@ -327,10 +444,21 @@ function showAddMat() {
 }
 async function ocultar() {
     document.querySelectorAll('[data-addCarrito]').forEach((add) => {
-        add.classList.remove('active')
+        add.classList.remove('active');
     })
     const add = document.getElementById('btn-addMat')
     const target = document.querySelector(add.dataset.target)
     target.classList.remove('active');
+
+    const edit = document.querySelectorAll("[data-editMat]").forEach((e)=>{
+        e.classList.remove('active');
+    })
+}
+async function showEdit(mat) {
+    ocultar()
+    const target = document.getElementById("btn-edit-"+mat.id_material)
+    const t = document.querySelector(target.dataset.target)
+
+    t.classList.add('active');
 }
 export default Materiales

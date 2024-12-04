@@ -10,7 +10,7 @@ const api = axios.create({
 })
 
 export const authService = {
-    login: (mail, clave) => api.post('/login', { mail, clave }),
+    login: (mail, clave) => api.post('/login/verif', { mail, clave }),
     logout: () => api.post('/logout'),
 }
 export const logedService = {
