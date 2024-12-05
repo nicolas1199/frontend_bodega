@@ -1,0 +1,55 @@
+.usuarios-container {
+    padding: 20px;
+  }
+  
+  .usuarios-container h2 {
+    color: #333;
+  }
+  
+  .usuarios-container .form-control,
+  .usuarios-container .form-select {
+    margin-bottom: 10px;
+  }
+  
+  .usuarios-container .table {
+    margin-top: 20px;
+  }
+  
+  .usuarios-container .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .usuarios-container .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+  }
+  
+  .usuarios-container .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+  }
+  
+  .usuarios-container .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+  }
+  
+  .usuarios-container .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+  
+  .usuarios-container select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .usuarios-container .form-header {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  

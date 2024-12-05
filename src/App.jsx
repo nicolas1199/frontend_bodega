@@ -5,8 +5,9 @@ import Login from './pages/Login.jsx'
 import Usuarios from './pages/Usuarios.jsx'
 import Materiales from './pages/Materiales.jsx'
 import Navbar from './components/Navbar.jsx'
-
+console.log('El componente App se ha cargado');
 const App = () => (
+    
     <StrictMode>
         <Router>
             <Navbar />

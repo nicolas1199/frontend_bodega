@@ -43,4 +43,25 @@ export const categoriaService = {
     update: (id, nuevo) => api.get((`loged/categorias/update/?`, [id]), nuevo),
     delete: (id) => api.delete((`loged/categorias/?`, [id])),
 }
-export default api
+
+export const userService = {
+    create: (newUsuario) => api.post('/loged/usuarios/create', newUsuario),
+    getAll: () => api.get('/loged/usuarios'),
+    update: (rut, updatedUsuario) => api.put(`/loged/usuarios/update/${rut}`, updatedUsuario),
+    delete: (rut) => api.delete(`/loged/usuarios/delete/${rut}`),
+};
+
+export const obtenerUsuarios = async () => {
+    try {
+        const response = await fetch('http://localhost:3000/api/loged/usuarios');
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error al obtener los usuarios:', error);
+        return []; // Retorna un array vacío si hay un error
+    }
+};
+
+export default api;
