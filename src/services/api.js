@@ -14,9 +14,6 @@ export const authService = {
     login: (mail, clave) => api.post('/login', { mail, clave }),
     logout: () => api.post('/logout'),
 }
-export const logedService = {
-    getData: () => api.get('/loged/materiales'),
-}
 
 export const cartService = {
     create: (material, rut) =>
@@ -42,5 +39,9 @@ export const categoriaService = {
     getAll: () => api.get('/loged/categorias'),
     update: (id, nuevo) => api.get((`loged/categorias/update/?`, [id]), nuevo),
     delete: (id) => api.delete((`loged/categorias/?`, [id])),
+}
+
+export const sessionService = {
+    getSession: (sessionID) => api.post('/loged/session/', [sessionID]),
 }
 export default api
