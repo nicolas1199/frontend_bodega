@@ -51,6 +51,10 @@ export const userService = {
     delete: (rut) => api.delete(`/loged/usuarios/delete/${rut}`),
 };
 
+export const sessionService = {
+    getSession: (sessionID) => api.get(`/session/${sessionID}`),
+};
+
 export const obtenerUsuarios = async () => {
     try {
         const response = await fetch('http://localhost:3000/api/loged/usuarios');
