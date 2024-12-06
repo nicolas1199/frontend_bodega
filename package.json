@@ -17,10 +17,7 @@
         "datatables.net-bs5": "^2.1.8",
         "datatables.net-react": "^1.0.0",
         "react": "^18.3.1",
-<<<<<<< HEAD
-=======
         "react-bootstrap": "^2.10.6",
->>>>>>> 9cacd1fdd0b85506f50b9bd25c6e12c07b478170
         "react-cookie": "^7.2.2",
         "react-dom": "^18.3.1",
         "react-router-dom": "^7.0.1"

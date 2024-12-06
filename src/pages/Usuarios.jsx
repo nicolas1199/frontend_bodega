@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-bs5';
 import { userService } from '../services/api.js'; 
+import { Modal, Button, Form } from 'react-bootstrap'
 import './Usuarios.css';
 
 DataTable.use(DT);
@@ -16,12 +17,12 @@ const Usuarios = () => {
     rol: '',
     str_dir: '',
     id_co: '',
-  });
+  })
+  const [selectedUsuario, setSelectedUsuario] = useState(null)
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    console.log('El useEffect se está ejecutando');
     userService.getAll().then((res) => {
-      console.log('Datos recibidos desde la API:', res.data);
       setUsuarios(res.data);
     }).catch((error) => {
       console.error('Error al cargar usuarios:', error);
@@ -34,6 +35,12 @@ const Usuarios = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const handleEditChange = (e) => {
+    setSelectedUsuario({
+        ...selectedUsuario,
+        [e.target.name]: e.target.value,
+    })
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -58,14 +65,16 @@ const Usuarios = () => {
   };
 
   const handleUpdate = (rut) => {
-    userService.update(rut, newUsuario).then((res) => {
-      setUsuarios(
-        usuarios.map((usuario) => (usuario.rut === rut ? res.data : usuario))
-      );
+    userService.update(selectedUsuario.rut, selectedUsuario).then((res) => {
+       window.location.reload()
     });
   };
 
-  // Formatear los datos para la tabla
+  const openEditModal = (usuario) => {
+    setSelectedUsuario(usuario)
+    setShowModal(true)
+}
+
   function formatUsuarios(data) {
     if (!data || !Array.isArray(data)) return []; // Validación de datos
     
@@ -78,18 +87,18 @@ const Usuarios = () => {
       usuario.id_co,
       // Aquí renderizamos las acciones de manera válida
       <div className="d-flex gap-2">
-        <button
-          className="btn btn-danger btn-sm"
+        <Button
+          variant="danger"
           onClick={() => handleDelete(usuario.rut)}
-        >
+      >
           Eliminar
-        </button>
-        <button
-          className="btn btn-warning btn-sm"
-          onClick={() => handleUpdate(usuario.rut)}
-        >
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => openEditModal(usuario)}
+      >
           Editar
-        </button>
+        </Button>
       </div>,
     ]);
   }
@@ -162,7 +171,6 @@ const Usuarios = () => {
         </button>
       </form>
 
-      {/* Tabla para mostrar los usuarios */}
       <DataTable
         data={formatUsuarios(usuarios)}
         className="table table-striped"
@@ -178,9 +186,88 @@ const Usuarios = () => {
           ],
         }}
         slots={{
-            5: (row) => <td>{row}</td>,
+            6: (row) => <td>{row}</td>,
         }}
       ></DataTable>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Editar Usuario</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>RUT</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="rut"
+                                value={selectedUsuario?.rut || ''}
+                                onChange={handleEditChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Nombre</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="nombre_usuario"
+                                value={selectedUsuario?.str_nombre || ''}
+                                onChange={handleEditChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Correo</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="mail"
+                                value={selectedUsuario?.mail || ''}
+                                onChange={handleEditChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Rol</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="rol"
+                                value={selectedUsuario?.rol || ''}
+                                onChange={handleEditChange}
+                            > 
+                                <option value="">Seleccione un rol</option>
+                                <option value="cliente">Cliente</option>
+                                <option value="jefe">Jefe</option>
+                                <option value="trabajador">Trabajador</option>
+                                </Form.Control>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Direccion</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="str_dir"
+                                value={selectedUsuario?.str_dir || ''}
+                                onChange={handleEditChange}
+                            />        
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>ID comuna</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="id_co"
+                                value={selectedUsuario?.id_co || ''}
+                                onChange={handleEditChange}
+                            />        
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setShowModal(false)}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={handleUpdate}>
+                        Guardar Cambios
+                    </Button>
+                </Modal.Footer>
+            </Modal>
     </div>
   );
 };
