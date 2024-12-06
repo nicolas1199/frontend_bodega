@@ -66,28 +66,33 @@ const Usuarios = () => {
   };
 
   // Formatear los datos para la tabla
-  function formatUsuarios (data) {
-    if (!data) return [];
-    const usuarios = data
-    if (!usuarios.data) return []
+  function formatUsuarios(data) {
+    if (!data || !Array.isArray(data)) return []; // Validación de datos
     
-    return usuarios.data.map((usuario) => [
+    return data.map((usuario) => [
       usuario.rut,
       usuario.str_nombre,
       usuario.mail,
       usuario.rol,
       usuario.str_dir,
       usuario.id_co,
-      <div>
-        <button onClick={() => handleDelete(usuario.rut)}>
-            Eliminar
+      // Aquí renderizamos las acciones de manera válida
+      <div className="d-flex gap-2">
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => handleDelete(usuario.rut)}
+        >
+          Eliminar
         </button>
-        <button onClick={() => handleUpdate(usuario.rut)}>
-            Editar
+        <button
+          className="btn btn-warning btn-sm"
+          onClick={() => handleUpdate(usuario.rut)}
+        >
+          Editar
         </button>
       </div>,
     ]);
-  };
+  }
 
   return (
     <div>
