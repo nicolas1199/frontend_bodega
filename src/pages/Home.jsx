@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-console.log('El componente HOME se ha cargado');
+
 const Home = () => {
     return (
         <div className="container mt-5">

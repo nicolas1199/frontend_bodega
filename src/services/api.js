@@ -31,7 +31,7 @@ export const cartService = {
         ),
 }
 export const matService = {
-    create: (material) => api.post(`materiales/create`, material),
+    create: (material) => api.post('/loged/materiales/create', material),
     getAll: () => api.get('/loged/materiales'),
     update: (id, nuevo) => api.put(`/loged/materiales/update/${id}`, nuevo),
     delete: (id) => api.delete(`/loged/materiales/delete/${id}`),
@@ -47,25 +47,26 @@ export const categoriaService = {
 export const userService = {
     create: (newUsuario) => api.post('/loged/usuarios/create', newUsuario),
     getAll: () => api.get('/loged/usuarios'),
-    update: (rut, updatedUsuario) => api.put(`/loged/usuarios/update/${rut}`, updatedUsuario),
+    update: (rut, updatedUsuario) =>
+        api.put(`/loged/usuarios/update/${rut}`, updatedUsuario),
     delete: (rut) => api.delete(`/loged/usuarios/delete/${rut}`),
-};
+}
 
 export const sessionService = {
-    getSession: (sessionID) => api.get(`/session/${sessionID}`),
-};
+    getSession: (sessionID) => api.post('/loged/session', { sessionID }),
+}
 
 export const obtenerUsuarios = async () => {
     try {
-        const response = await fetch('http://localhost:3000/api/loged/usuarios');
+        const response = await fetch('http://localhost:3000/api/loged/usuarios')
         if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status}`);
+            throw new Error(`Error en la solicitud: ${response.status}`)
         }
-        return await response.json();
+        return await response.json()
     } catch (error) {
-        console.error('Error al obtener los usuarios:', error);
-        return []; // Retorna un array vacío si hay un error
+        console.error('Error al obtener los usuarios:', error)
+        return []
     }
-};
+}
 
-export default api;
+export default api

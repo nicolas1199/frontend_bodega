@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import { authService, sessionService } from '../services/api'
+import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap'
 
-const Navbar = () => {
+const Navigation = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['sessionID'])
     const [sesion, setSesion] = useState(false)
     const navigate = useNavigate()
@@ -16,6 +17,7 @@ const Navbar = () => {
                     const sessionData = await sessionService.getSession(
                         sessionID
                     )
+                    console.log('sessionData:', sessionData)
                     if (sessionData) {
                         setSesion(true)
                     } else {
@@ -45,63 +47,37 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="container-fluid">
-                <Link className="navbar-brand" to="/">
-                    Bodega
-                </Link>
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav"
-                    aria-controls="navbarNav"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/">
-                                Inicio
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/materiales">
-                                Materiales
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/usuarios">
-                                Usuarios
-                            </Link>
-                        </li>
-                    </ul>
-
-                    <ul className="navbar-nav ms-auto">
-                        {sesion ? (
-                            <li className="nav-item">
-                                <button
-                                    className="btn btn-link nav-link"
-                                    onClick={logout}
-                                >
-                                    Cerrar sesión
-                                </button>
-                            </li>
-                        ) : (
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/login">
-                                    Iniciar sesión
-                                </Link>
-                            </li>
-                        )}
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <Navbar className="--bs-primary-bg-subtle" expand="lg">
+            <Navbar.Brand as={Link} to="/">
+                Bodega
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbarNav" />
+            <Navbar.Collapse id="navbarNav">
+                <Nav className="me-auto">
+                    <Nav.Link as={Link} to="/">
+                        Inicio
+                    </Nav.Link>
+                    <Nav.Link as={Link} to="/materiales">
+                        Materiales
+                    </Nav.Link>
+                    <Nav.Link as={Link} to="/usuarios">
+                        Usuarios
+                    </Nav.Link>
+                </Nav>
+                <Nav className="ms-auto">
+                    {sesion ? (
+                        <Nav.Link as={Button} variant="link" onClick={logout}>
+                            Cerrar sesión
+                        </Nav.Link>
+                    ) : (
+                        <Nav.Link as={Link} to="/login">
+                            Iniciar sesión
+                        </Nav.Link>
+                    )}
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
     )
 }
 
-export default Navbar
+export default Navigation
