@@ -30,8 +30,8 @@ export const cartService = {
 export const matService = {
     create: (material) => api.post(`materiales/create`, material),
     getAll: () => api.get('/loged/materiales'),
-    update: (id, nuevo) => api.get((`materiales/update/?`, [id]), nuevo),
-    delete: (id) => api.delete((`materiales/?`, [id])),
+    update: (id, nuevo) => api.put(`/loged/materiales/update/${id}`, nuevo),
+    delete: (id) => api.delete(`/loged/materiales/delete/${id}`),
 }
 
 export const categoriaService = {
