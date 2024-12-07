@@ -1,0 +1,25 @@
+body {
+    background-color: #fff;
+    color: #000;
+}
+
+.form-label {
+    font-weight: normal;
+    white-space: nowrap;
+    text-align: left;
+    color: #000;
+}
+
+div.dt-container div.dt-length label {
+    font-weight: normal;
+    text-align: left;
+    white-space: nowrap;
+    color: #000;
+}
+
+div.dt-container div.dt-search label {
+    font-weight: normal;
+    white-space: nowrap;
+    text-align: left;
+    color: #000;
+}

@@ -14,11 +14,7 @@ const Login = () => {
         setError('')
         try {
             const response = await authService.login(mail, clave)
-            console.log('Llegó')
-
-            console.log('Login successful:', response.data)
-            localStorage.setItem('token', response.data.token)
-            navigate('/loged/materiales')
+            navigate('/materiales')
         } catch (err) {
             setError(
                 'Error al iniciar sesión. Por favor, verifica tus credenciales.'

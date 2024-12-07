@@ -4,12 +4,12 @@ import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Usuarios from './pages/Usuarios.jsx'
 import Materiales from './pages/Materiales.jsx'
-import Navbar from './components/Navbar.jsx'
+import Nav from './components/Navbar.jsx'
 
 const App = () => (
     <StrictMode>
         <Router>
-            <Navbar />
+            <Nav />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
