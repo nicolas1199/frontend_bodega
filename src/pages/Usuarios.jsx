@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-bs5';
-import { userService } from '../services/api.js';
+import { comunasService, userService } from '../services/api.js';
 import { Modal, Button, Form } from 'react-bootstrap'
 import './Usuarios.css';
 
 DataTable.use(DT);
 
 const Usuarios = () => {
+  const [comunas, setComunas] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [newUsuario, setNewUsuario] = useState({
     rut: '',
@@ -27,6 +28,9 @@ const Usuarios = () => {
     }).catch((error) => {
       console.error('Error al cargar usuarios:', error);
     });
+    comunasService.getAll().then((res) => {
+      setComunas(res.data)
+    })
   }, []);
 
   const handleChange = (e) => {
@@ -65,9 +69,10 @@ const Usuarios = () => {
   };
 
   const handleUpdate = (rut) => {
-    userService.update(selectedUsuario.rut, selectedUsuario).then((res) => {
-      window.location.reload()
-    });
+    
+    userService.
+      update(selectedUsuario.rut, selectedUsuario).
+      then((res) => window.location.reload());
   };
 
   const openEditModal = (usuario) => {
@@ -84,27 +89,27 @@ const Usuarios = () => {
       usuario.mail,
       usuario.rol,
       usuario.str_dir,
-      usuario.id_co,
+      usuario.str_co,
       // Aquí renderizamos las acciones de manera válida
       <div className="d-flex gap-2">
-        <Button
-          variant="danger"
-          onClick={() => handleDelete(usuario.rut)}
-        >
-          Eliminar
-        </Button>
         <Button
           variant="primary"
           onClick={() => openEditModal(usuario)}
         >
           Editar
         </Button>
+        <Button
+          variant="danger"
+          onClick={() => handleDelete(usuario.rut)}
+        >
+          Eliminar
+        </Button>
       </div>,
     ]);
   }
 
   return (
-    <div style={{paddingLeft:'5%', paddingRight:'5%'}}>
+    <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
       <h1>Usuarios</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -158,14 +163,18 @@ const Usuarios = () => {
           placeholder="Dirección"
           required
         />
-        <input
-          type="number"
+        <select
           name="id_co"
           value={newUsuario.id_co}
           onChange={handleChange}
-          placeholder="ID de Comuna"
           required
-        />
+        >
+          <option value="">Seleccione una comuna</option>
+          {comunas.map((co) => (
+            <option value={co.id_co}>{co.str_co}</option>
+          ))}
+        </select>
+
         <button type="submit" className="btn btn-primary">
           Agregar
         </button>
@@ -181,7 +190,7 @@ const Usuarios = () => {
             { title: 'Correo' },
             { title: 'Rol' },
             { title: 'Dirección' },
-            { title: 'ID de Comuna' },
+            { title: 'Comuna Residencial' },
             { title: 'Acciones', orderable: false },
           ],
         }}
@@ -202,13 +211,14 @@ const Usuarios = () => {
                 name="rut"
                 value={selectedUsuario?.rut || ''}
                 onChange={handleEditChange}
+                disabled
               />
             </Form.Group>
             <Form.Group>
               <Form.Label>Nombre</Form.Label>
               <Form.Control
                 type="text"
-                name="nombre_usuario"
+                name="str_nombre"
                 value={selectedUsuario?.str_nombre || ''}
                 onChange={handleEditChange}
               />
@@ -246,13 +256,18 @@ const Usuarios = () => {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>ID comuna</Form.Label>
+              <Form.Label>Comuna</Form.Label>
               <Form.Control
-                type="number"
+                as="select"
                 name="id_co"
                 value={selectedUsuario?.id_co || ''}
                 onChange={handleEditChange}
-              />
+              >
+                <option value="">Seleccione una comuna</option>
+                {comunas.map((co) => (
+                  <option value={co.id_co}>{co.str_co}</option>
+                ))}
+              </Form.Control>
             </Form.Group>
           </Form>
         </Modal.Body>
