@@ -91,73 +91,73 @@ const Materiales = () => {
             </div>,
         ])
     }
-    const editMaterial=(id)=>{
+    const editMaterial = (id) => {
 
-    return (
-        <div>
-            <h1>Materiales</h1>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="nombre_material"
-                    value={newMaterial.nombre_material}
-                    onChange={handleChange}
-                    placeholder="Nombre"
-                />
-                <input
-                    type="number"
-                    name="inventario"
-                    value={newMaterial.inventario}
-                    onChange={handleChange}
-                    placeholder="Stock"
-                />
-                <input
-                    type="number"
-                    name="precio_compra"
-                    value={newMaterial.precio_compra}
-                    onChange={handleChange}
-                    placeholder="Precio de compra"
-                />
-                <input
-                    type="number"
-                    name="precio_venta"
-                    value={newMaterial.precio_venta}
-                    onChange={handleChange}
-                    placeholder="Precio de venta"
-                />
-                <select name="id_categoria" onChange={handleChange}>
-                    <option value="">Seleccione una categoria</option>
-                    {categorias.map((categoria) => (
-                        <option
-                            key={categoria.id_categoria}
-                            value={categoria.id_categoria}
-                        >
-                            {categoria.nombre_categoria}
-                        </option>
-                    ))}
-                </select>
-                <button type="submit">Agregar</button>
-            </form>
+        return (
+            <div>
+                <h1>Materiales</h1>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        name="nombre_material"
+                        value={newMaterial.nombre_material}
+                        onChange={handleChange}
+                        placeholder="Nombre"
+                    />
+                    <input
+                        type="number"
+                        name="inventario"
+                        value={newMaterial.inventario}
+                        onChange={handleChange}
+                        placeholder="Stock"
+                    />
+                    <input
+                        type="number"
+                        name="precio_compra"
+                        value={newMaterial.precio_compra}
+                        onChange={handleChange}
+                        placeholder="Precio de compra"
+                    />
+                    <input
+                        type="number"
+                        name="precio_venta"
+                        value={newMaterial.precio_venta}
+                        onChange={handleChange}
+                        placeholder="Precio de venta"
+                    />
+                    <select name="id_categoria" onChange={handleChange}>
+                        <option value="">Seleccione una categoria</option>
+                        {categorias.map((categoria) => (
+                            <option
+                                key={categoria.id_categoria}
+                                value={categoria.id_categoria}
+                            >
+                                {categoria.nombre_categoria}
+                            </option>
+                        ))}
+                    </select>
+                    <button type="submit">Agregar</button>
+                </form>
 
-            <DataTable
-                data={formatMateriales(materiales)}
-                className="table table-striped"
-                options={{
-                    columns: [
-                        { title: 'Nombre' },
-                        { title: 'Stock' },
-                        { title: 'Precio de compra' },
-                        { title: 'Precio de venta' },
-                        { title: 'Categoria' },
-                        { title: 'Acciones', orderable: false },
-                    ],
-                }}
-                slots={{
-                    5: (row) => <td>{row}</td>,
-                }}
-            ></DataTable>
-        </div>
-    )
+                <DataTable
+                    data={formatMateriales(materiales)}
+                    className="table table-striped"
+                    options={{
+                        columns: [
+                            { title: 'Nombre' },
+                            { title: 'Stock' },
+                            { title: 'Precio de compra' },
+                            { title: 'Precio de venta' },
+                            { title: 'Categoria' },
+                            { title: 'Acciones', orderable: false },
+                        ],
+                    }}
+                    slots={{
+                        5: (row) => <td>{row}</td>,
+                    }}
+                ></DataTable>
+            </div>
+        )
+    }
 }
-
 export default Materiales
