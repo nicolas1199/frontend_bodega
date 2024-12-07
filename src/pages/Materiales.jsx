@@ -3,7 +3,7 @@ import { matService } from '../services/api.js'
 import { categoriaService } from '../services/api.js'
 import DataTable from 'datatables.net-react'
 import DT from 'datatables.net-bs5'
-import { Modal, Button, Form, Row, Col, Container } from 'react-bootstrap'
+import { Modal, Button, Form, Row, Col, Container, FormControl } from 'react-bootstrap'
 
 DataTable.use(DT)
 
@@ -98,7 +98,7 @@ const Materiales = () => {
             material.precio_compra,
             material.precio_venta,
             material.nombre_categoria,
-            <div>
+            <div className="d-flex gap-2">
                 <Button
                     variant="primary"
                     onClick={() => openEditModal(material)}
@@ -316,60 +316,87 @@ const Materiales = () => {
         )
     }
     return (
-        <div style={{paddingLeft:'5%', paddingRight:'5%'}}>
+        <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
             <h1>Materiales</h1>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="nombre_material"
-                    value={newMaterial.nombre_material}
-                    onChange={handleChange}
-                    placeholder="Nombre"
-                    required
-                />
-                <input
-                    type="number"
-                    name="inventario"
-                    value={newMaterial.inventario}
-                    onChange={handleChange}
-                    placeholder="Inventario"
-                    required
-                />
-                <input
-                    type="number"
-                    name="precio_compra"
-                    value={newMaterial.precio_compra}
-                    onChange={handleChange}
-                    placeholder="Precio de Compra"
-                    required
-                />
-                <input
-                    type="number"
-                    name="precio_venta"
-                    value={newMaterial}
-                    onChange={handleChange}
-                    placeholder="Precio de Venta"
-                    required
-                />
-                <select
-                    name="id_categoria"
-                    value={newMaterial.id_categoria}
-                    onChange={handleChange}
-                    required
-                >
-                    <option value="">Seleccione una categoria</option>
-                    {categorias.map((cat) => (
-                        <option value={cat.id_categoria}>{cat.nombre_categoria}</option>
-                    ))}
-                </select>
-                <button type="submit" className="btn btn-primary">
-                    Agregar
-                </button>
-            </form>
+            <Form onSubmit={handleSubmit}>
+                <Row>
+                    <Col xs="auto" md="auto">
+                        <Form.Group>
+                            <Form.Control
+                                type="text"
+                                name="nombre_material"
+                                value={newMaterial.nombre_material}
+                                onChange={handleChange}
+                                placeholder="Nombre del material"
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col xs='auto'>
+                        <FormControl
+                            type="number"
+                            name="inventario"
+                            value={newMaterial.inventario}
+                            onChange={handleChange}
+                            placeholder="Inventario"
+                            required
+                        />
+                    </Col>
+                    <Col xs='auto'>
+                        <FormControl
+                            type="number"
+                            name="precio_compra"
+                            value={newMaterial.precio_compra}
+                            onChange={handleChange}
+                            placeholder="Precio de Compra"
+                            required
+                        />
+                    </Col>
+                    <Col xs='auto'>
+                        <FormControl
+                            type="number"
+                            name="precio_venta"
+                            value={newMaterial}
+                            onChange={handleChange}
+                            placeholder="Precio de Venta"
+                            required
+                        />
+                    </Col>
+                    <Col xs='auto'>
+                        <Form.Select
+                            name="id_categoria"
+                            value={newMaterial.id_categoria}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Seleccione una categoria</option>
+                            {categorias.map((cat) => (
+                                <option value={cat.id_categoria}>{cat.nombre_categoria}</option>
+                            ))}
+                        </Form.Select>
+                    </Col>
+                    <Col xs="auto">
+                        <Button type="submit">Agregar</Button>
+                    </Col>
+                </Row>
+            </Form>
             <DataTable
                 data={formatMateriales(materiales)}
                 className="table table-striped"
                 options={{
+                    language: {
+                        search: 'Buscar:',
+                        lengthMenu: 'Mostrar _MENU_ elementos',
+                        info: 'Mostrando _START_ a _END_ de _TOTAL_ elementos',
+                        infoEmpty: 'No se encontraron elementos',
+                        infoFiltered: '(filtrado de _MAX_ elementos totales)',
+                        zeroRecords: 'No se encontraron elementos',
+                        paginate: {
+                            first: 'Primero',
+                            previous: 'Anterior',
+                            next: 'Siguiente',
+                            last: 'Último',
+                        },
+                    },
                     columns: [
                         { title: 'Id' },
                         { title: 'Nombre' },
@@ -437,7 +464,7 @@ const Materiales = () => {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Rol</Form.Label>
+                            <Form.Label>Categoria</Form.Label>
                             <Form.Control
                                 as="select"
                                 name="id_categoria"
