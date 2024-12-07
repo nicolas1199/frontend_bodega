@@ -349,7 +349,7 @@ const Materiales = () => {
                         <FormControl
                             type="number"
                             name="precio_venta"
-                            value={newMaterial}
+                            value={newMaterial.precio_venta}
                             onChange={handleChange}
                             placeholder="Precio de Venta"
                             required
