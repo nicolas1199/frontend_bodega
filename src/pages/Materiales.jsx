@@ -114,6 +114,7 @@ const Materiales = () => {
                     Eliminar
                 </Button>
             </div>,
+            </div>
         ])
     }
     const editMaterial = (id) => {
