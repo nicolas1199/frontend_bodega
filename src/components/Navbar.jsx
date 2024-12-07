@@ -12,12 +12,19 @@ const Navigation = () => {
     useEffect(() => {
         const checkSession = async () => {
             try {
-                const sessionID = cookies.sessionID
+                let sessionID = cookies.sessionID
+
+                if (sessionID && sessionID.startsWith('s:')) {
+                    sessionID = sessionID.slice(2).split('.')[0]
+                }
+
+                console.log('sessionID procesado:', sessionID)
+
                 if (sessionID) {
                     const sessionData = await sessionService.getSession(
                         sessionID
                     )
-                    console.log('sessionData:', sessionData)
+
                     if (sessionData) {
                         setSesion(true)
                     } else {
@@ -48,7 +55,11 @@ const Navigation = () => {
 
     return (
         <div>
-            <Navbar className="--bs-primary-bg-subtle" expand="lg" style={{paddingLeft:'5%', paddingRight:'5%'}}>
+            <Navbar
+                className="--bs-primary-bg-subtle"
+                expand="lg"
+                style={{ paddingLeft: '5%', paddingRight: '5%' }}
+            >
                 <Navbar.Brand as={Link} to="/">
                     Bodega
                 </Navbar.Brand>
@@ -67,7 +78,11 @@ const Navigation = () => {
                     </Nav>
                     <Nav className="ms-auto">
                         {sesion ? (
-                            <Nav.Link as={Button} variant="link" onClick={logout}>
+                            <Nav.Link
+                                as={Button}
+                                variant="link"
+                                onClick={logout}
+                            >
                                 Cerrar sesión
                             </Nav.Link>
                         ) : (
