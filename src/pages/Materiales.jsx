@@ -8,8 +8,8 @@ import { Modal, Button, Form, Row, Col, Container, FormControl } from 'react-boo
 DataTable.use(DT)
 
 const Materiales = () => {
-    const [materiales, setMateriales] = useState([]);
-    const [categorias, setCategorias] = useState([]);
+    const [materiales, setMateriales] = useState([])
+    const [categorias, setCategorias] = useState([])
     const [newMaterial, setNewMaterial] = useState({
         nombre_material: '',
         inventario: '',
@@ -34,8 +34,8 @@ const Materiales = () => {
             ...prev,
             [name]:
                 name === 'inventario' ||
-                    name === 'precio_compra' ||
-                    name === 'precio_venta'
+                name === 'precio_compra' ||
+                name === 'precio_venta'
                     ? value.replace(/\D/, '')
                     : value,
         }))
@@ -48,8 +48,8 @@ const Materiales = () => {
             ...prev,
             [name]:
                 name === 'inventario' ||
-                    name === 'precio_compra' ||
-                    name === 'precio_venta'
+                name === 'precio_compra' ||
+                name === 'precio_venta'
                     ? value.replace(/\D/, '')
                     : value,
         }))
@@ -99,6 +99,7 @@ const Materiales = () => {
             material.precio_venta,
             material.nombre_categoria,
             <div className="d-flex gap-2">
+            <div className="d-flex gap-2">
                 <Button
                     variant="primary"
                     onClick={() => openEditModal(material)}
@@ -116,7 +117,6 @@ const Materiales = () => {
         ])
     }
     const editMaterial = (id) => {
-
         return (
             <Container style={{ maxWidth: '99%' }}>
                 <h1>Materiales</h1>
@@ -209,17 +209,6 @@ const Materiales = () => {
                     options={{
                         language: {
                             search: 'Buscar:',
-                            lengthMenu: 'Mostrar _MENU_ elementos',
-                            info: 'Mostrando _START_ a _END_ de _TOTAL_ elementos',
-                            infoEmpty: 'No se encontraron elementos',
-                            infoFiltered: '(filtrado de _MAX_ elementos totales)',
-                            zeroRecords: 'No se encontraron elementos',
-                            paginate: {
-                                first: 'Primero',
-                                previous: 'Anterior',
-                                next: 'Siguiente',
-                                last: 'Último',
-                            },
                         },
                         columns: [
                             { title: 'Nombre' },
@@ -246,7 +235,9 @@ const Materiales = () => {
                                 <Form.Control
                                     type="text"
                                     name="nombre_material"
-                                    value={selectedMaterial?.nombre_material || ''}
+                                    value={
+                                        selectedMaterial?.nombre_material || ''
+                                    }
                                     onChange={handleEditChange}
                                 />
                             </Form.Group>
@@ -264,7 +255,9 @@ const Materiales = () => {
                                 <Form.Control
                                     type="number"
                                     name="precio_compra"
-                                    value={selectedMaterial?.precio_compra || ''}
+                                    value={
+                                        selectedMaterial?.precio_compra || ''
+                                    }
                                     onChange={handleEditChange}
                                 />
                             </Form.Group>
@@ -471,13 +464,16 @@ const Materiales = () => {
                                 value={selectedMaterial?.id_categoria || ''}
                                 onChange={handleEditChange}
                             >
-                                <option value="">Seleccione una categoria</option>
+                                <option value="">
+                                    Seleccione una categoria
+                                </option>
                                 {categorias.map((cat) => (
-                                    <option value={cat.id_categoria}>{cat.nombre_categoria}</option>
+                                    <option value={cat.id_categoria}>
+                                        {cat.nombre_categoria}
+                                    </option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
-
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

@@ -3,9 +3,9 @@ import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-bs5';
 import { comunasService, userService } from '../services/api.js';
 import { Modal, Button, Form } from 'react-bootstrap'
-import './Usuarios.css';
+import './Usuarios.css'
 
-DataTable.use(DT);
+DataTable.use(DT)
 
 const Usuarios = () => {
   const [comunas, setComunas] = useState([]);
@@ -22,6 +22,16 @@ const Usuarios = () => {
   const [selectedUsuario, setSelectedUsuario] = useState(null)
   const [showModal, setShowModal] = useState(false)
 
+    useEffect(() => {
+        userService
+            .getAll()
+            .then((res) => {
+                setUsuarios(res.data)
+            })
+            .catch((error) => {
+                console.error('Error al cargar usuarios:', error)
+            })
+    }, [])
   useEffect(() => {
     userService.getAll().then((res) => {
       setUsuarios(res.data);
@@ -33,55 +43,54 @@ const Usuarios = () => {
     })
   }, []);
 
-  const handleChange = (e) => {
-    setNewUsuario({
-      ...newUsuario,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const handleEditChange = (e) => {
-    setSelectedUsuario({
-      ...selectedUsuario,
-      [e.target.name]: e.target.value,
-    })
-  }
+    const handleChange = (e) => {
+        setNewUsuario({
+            ...newUsuario,
+            [e.target.name]: e.target.value,
+        })
+    }
+    const handleEditChange = (e) => {
+        setSelectedUsuario({
+            ...selectedUsuario,
+            [e.target.name]: e.target.value,
+        })
+    }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    userService.create(newUsuario).then((res) => {
-      setUsuarios([...usuarios, res.data]);
-      setNewUsuario({
-        rut: '',
-        str_nombre: '',
-        mail: '',
-        clave: '',
-        rol: '',
-        str_dir: '',
-        id_co: '',
-      });
-    });
-  };
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        userService.create(newUsuario).then((res) => {
+            setUsuarios([...usuarios, res.data])
+            setNewUsuario({
+                rut: '',
+                str_nombre: '',
+                mail: '',
+                clave: '',
+                rol: '',
+                str_dir: '',
+                id_co: '',
+            })
+        })
+    }
 
-  const handleDelete = (rut) => {
-    userService.delete(rut).then(() => {
-      setUsuarios(usuarios.filter((usuario) => usuario.rut !== rut));
-    });
-  };
+    const handleDelete = (rut) => {
+        userService.delete(rut).then(() => {
+            setUsuarios(usuarios.filter((usuario) => usuario.rut !== rut))
+        })
+    }
 
-  const handleUpdate = (rut) => {
-    
-    userService.
-      update(selectedUsuario.rut, selectedUsuario).
-      then((res) => window.location.reload());
-  };
+    const handleUpdate = (rut) => {
+        userService.update(selectedUsuario.rut, selectedUsuario).then((res) => {
+            window.location.reload()
+        })
+    }
 
-  const openEditModal = (usuario) => {
-    setSelectedUsuario(usuario)
-    setShowModal(true)
-  }
+    const openEditModal = (usuario) => {
+        setSelectedUsuario(usuario)
+        setShowModal(true)
+    }
 
-  function formatUsuarios(data) {
-    if (!data || !Array.isArray(data)) return []; // Validación de datos
+    function formatUsuarios(data) {
+        if (!data || !Array.isArray(data)) return []
 
     return data.map((usuario) => [
       usuario.rut,
@@ -180,111 +189,113 @@ const Usuarios = () => {
         </button>
       </form>
 
-      <DataTable
-        data={formatUsuarios(usuarios)}
-        className="table table-striped"
-        options={{
-          columns: [
-            { title: 'RUT' },
-            { title: 'Nombre' },
-            { title: 'Correo' },
-            { title: 'Rol' },
-            { title: 'Dirección' },
-            { title: 'Comuna Residencial' },
-            { title: 'Acciones', orderable: false },
-          ],
-        }}
-        slots={{
-          6: (row) => <td>{row}</td>,
-        }}
-      ></DataTable>
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Editar Usuario</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group>
-              <Form.Label>RUT</Form.Label>
-              <Form.Control
-                type="text"
-                name="rut"
-                value={selectedUsuario?.rut || ''}
-                onChange={handleEditChange}
-                disabled
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control
-                type="text"
-                name="str_nombre"
-                value={selectedUsuario?.str_nombre || ''}
-                onChange={handleEditChange}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Correo</Form.Label>
-              <Form.Control
-                type="text"
-                name="mail"
-                value={selectedUsuario?.mail || ''}
-                onChange={handleEditChange}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Rol</Form.Label>
-              <Form.Control
-                as="select"
-                name="rol"
-                value={selectedUsuario?.rol || ''}
-                onChange={handleEditChange}
-              >
-                <option value="">Seleccione un rol</option>
-                <option value="cliente">Cliente</option>
-                <option value="jefe">Jefe</option>
-                <option value="trabajador">Trabajador</option>
-              </Form.Control>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Direccion</Form.Label>
-              <Form.Control
-                type="text"
-                name="str_dir"
-                value={selectedUsuario?.str_dir || ''}
-                onChange={handleEditChange}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Comuna</Form.Label>
-              <Form.Control
-                as="select"
-                name="id_co"
-                value={selectedUsuario?.id_co || ''}
-                onChange={handleEditChange}
-              >
-                <option value="">Seleccione una comuna</option>
-                {comunas.map((co) => (
-                  <option value={co.id_co}>{co.str_co}</option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setShowModal(false)}
-          >
-            Cancelar
-          </Button>
-          <Button variant="primary" onClick={handleUpdate}>
-            Guardar Cambios
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
-  );
-};
+            <DataTable
+                data={formatUsuarios(usuarios)}
+                className="table table-striped"
+                options={{
+                    language: {
+                        search: 'Buscar:',
+                        lengthMenu: 'Mostrar _MENU_ elementos',
+                        info: 'Mostrando _START_ a _END_ de _TOTAL_ elementos',
+                        infoEmpty: 'No se encontraron elementos',
+                        infoFiltered: '(filtrado de _MAX_ elementos totales)',
+                        zeroRecords: 'No se encontraron elementos',
+                    },
+                    columns: [
+                        { title: 'RUT' },
+                        { title: 'Nombre' },
+                        { title: 'Correo' },
+                        { title: 'Rol' },
+                        { title: 'Dirección' },
+                        { title: 'ID de Comuna' },
+                        { title: 'Acciones', orderable: false },
+                    ],
+                }}
+                slots={{
+                    6: (row) => <td>{row}</td>,
+                }}
+            ></DataTable>
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Editar Usuario</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>RUT</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="rut"
+                                value={selectedUsuario?.rut || ''}
+                                onChange={handleEditChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Nombre</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="nombre_usuario"
+                                value={selectedUsuario?.str_nombre || ''}
+                                onChange={handleEditChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Correo</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="mail"
+                                value={selectedUsuario?.mail || ''}
+                                onChange={handleEditChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Rol</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="rol"
+                                value={selectedUsuario?.rol || ''}
+                                onChange={handleEditChange}
+                            >
+                                <option value="">Seleccione un rol</option>
+                                <option value="cliente">Cliente</option>
+                                <option value="jefe">Jefe</option>
+                                <option value="trabajador">Trabajador</option>
+                            </Form.Control>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Direccion</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="str_dir"
+                                value={selectedUsuario?.str_dir || ''}
+                                onChange={handleEditChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>ID comuna</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="id_co"
+                                value={selectedUsuario?.id_co || ''}
+                                onChange={handleEditChange}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setShowModal(false)}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={handleUpdate}>
+                        Guardar Cambios
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </div>
+    )
+}
 
-export default Usuarios;
+export default Usuarios
