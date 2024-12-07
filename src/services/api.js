@@ -44,6 +44,10 @@ export const categoriaService = {
     delete: (id) => api.delete((`loged/categorias/?`, [id])),
 }
 
+export const comunasService = {
+    getAll: () => api.get('/comunas')
+}
+
 export const userService = {
     create: (newUsuario) => api.post('/loged/usuarios/create', newUsuario),
     getAll: () => api.get('/loged/usuarios'),
