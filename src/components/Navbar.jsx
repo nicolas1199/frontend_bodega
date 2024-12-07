@@ -47,36 +47,38 @@ const Navigation = () => {
     }
 
     return (
-        <Navbar className="--bs-primary-bg-subtle" expand="lg">
-            <Navbar.Brand as={Link} to="/">
-                Bodega
-            </Navbar.Brand>
-            <Navbar.Toggle aria-controls="navbarNav" />
-            <Navbar.Collapse id="navbarNav">
-                <Nav className="me-auto">
-                    <Nav.Link as={Link} to="/">
-                        Inicio
-                    </Nav.Link>
-                    <Nav.Link as={Link} to="/materiales">
-                        Materiales
-                    </Nav.Link>
-                    <Nav.Link as={Link} to="/usuarios">
-                        Usuarios
-                    </Nav.Link>
-                </Nav>
-                <Nav className="ms-auto">
-                    {sesion ? (
-                        <Nav.Link as={Button} variant="link" onClick={logout}>
-                            Cerrar sesión
+        <div>
+            <Navbar className="--bs-primary-bg-subtle" expand="lg" style={{paddingLeft:'5%', paddingRight:'5%'}}>
+                <Navbar.Brand as={Link} to="/">
+                    Bodega
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="navbarNav" />
+                <Navbar.Collapse id="navbarNav">
+                    <Nav className="me-auto">
+                        <Nav.Link as={Link} to="/">
+                            Inicio
                         </Nav.Link>
-                    ) : (
-                        <Nav.Link as={Link} to="/login">
-                            Iniciar sesión
+                        <Nav.Link as={Link} to="/materiales">
+                            Materiales
                         </Nav.Link>
-                    )}
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
+                        <Nav.Link as={Link} to="/usuarios">
+                            Usuarios
+                        </Nav.Link>
+                    </Nav>
+                    <Nav className="ms-auto">
+                        {sesion ? (
+                            <Nav.Link as={Button} variant="link" onClick={logout}>
+                                Cerrar sesión
+                            </Nav.Link>
+                        ) : (
+                            <Nav.Link as={Link} to="/login">
+                                Iniciar sesión
+                            </Nav.Link>
+                        )}
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
+        </div>
     )
 }
 

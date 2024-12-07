@@ -8,8 +8,8 @@ import { Modal, Button, Form, Row, Col, Container } from 'react-bootstrap'
 DataTable.use(DT)
 
 const Materiales = () => {
-    const [materiales, setMateriales] = useState([])
-    const [categorias, setCategorias] = useState([])
+    const [materiales, setMateriales] = useState([]);
+    const [categorias, setCategorias] = useState([]);
     const [newMaterial, setNewMaterial] = useState({
         nombre_material: '',
         inventario: '',
@@ -34,8 +34,8 @@ const Materiales = () => {
             ...prev,
             [name]:
                 name === 'inventario' ||
-                name === 'precio_compra' ||
-                name === 'precio_venta'
+                    name === 'precio_compra' ||
+                    name === 'precio_venta'
                     ? value.replace(/\D/, '')
                     : value,
         }))
@@ -48,8 +48,8 @@ const Materiales = () => {
             ...prev,
             [name]:
                 name === 'inventario' ||
-                name === 'precio_compra' ||
-                name === 'precio_venta'
+                    name === 'precio_compra' ||
+                    name === 'precio_venta'
                     ? value.replace(/\D/, '')
                     : value,
         }))
@@ -92,11 +92,12 @@ const Materiales = () => {
         if (!materiales) return []
 
         return materiales.map((material) => [
+            material.id_material,
             material.nombre_material,
             material.inventario,
             material.precio_compra,
             material.precio_venta,
-            material.id_categoria,
+            material.nombre_categoria,
             <div>
                 <Button
                     variant="primary"
@@ -116,130 +117,289 @@ const Materiales = () => {
     }
     const editMaterial = (id) => {
 
-    return (
-        <Container style={{ maxWidth: '99%' }}>
-            <h1>Materiales</h1>
-            <Form onSubmit={handleSubmit}>
-                <Row className="align-items-end">
-                    <Col xs="auto" md="auto">
-                        <Form.Group>
-                            <Form.Label>Nombre</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="nombre_material"
-                                value={newMaterial.nombre_material}
-                                placeholder="Nombre del material"
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                    </Col>
+        return (
+            <Container style={{ maxWidth: '99%' }}>
+                <h1>Materiales</h1>
+                <Form onSubmit={handleSubmit}>
+                    <Row className="align-items-end">
+                        <Col xs="auto" md="auto">
+                            <Form.Group>
+                                <Form.Label>Nombre</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="nombre_material"
+                                    value={newMaterial.nombre_material}
+                                    placeholder="Nombre del material"
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
 
-                    <Col xs="auto">
-                        <Form.Group>
-                            <Form.Label>Inventario</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="inventario"
-                                value={newMaterial.inventario}
-                                placeholder="Cantidad de material"
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                    </Col>
+                        <Col xs="auto">
+                            <Form.Group>
+                                <Form.Label>Inventario</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="inventario"
+                                    value={newMaterial.inventario}
+                                    placeholder="Cantidad de material"
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
 
-                    <Col xs="auto">
-                        <Form.Group>
-                            <Form.Label>Precio de compra</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="precio_compra"
-                                value={newMaterial.precio_compra}
-                                placeholder="Precio de compra"
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                    </Col>
+                        <Col xs="auto">
+                            <Form.Group>
+                                <Form.Label>Precio de compra</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="precio_compra"
+                                    value={newMaterial.precio_compra}
+                                    placeholder="Precio de compra"
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
 
-                    <Col xs="auto">
-                        <Form.Group>
-                            <Form.Label>Precio de venta</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="precio_venta"
-                                value={newMaterial.precio_venta}
-                                placeholder="Precio de venta"
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-                    </Col>
+                        <Col xs="auto">
+                            <Form.Group>
+                                <Form.Label>Precio de venta</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="precio_venta"
+                                    value={newMaterial.precio_venta}
+                                    placeholder="Precio de venta"
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
 
-                    <Col xs="auto">
-                        <Form.Group>
-                            <Form.Label>Categoria</Form.Label>
-                            <Form.Select
-                                name="id_categoria"
-                                value={newMaterial.id_categoria}
-                                onChange={handleChange}
-                            >
-                                <option value="">
-                                    Seleccione una categoria
-                                </option>
-                                {categorias.map((categoria) => (
-                                    <option
-                                        value={categoria.id_categoria}
-                                        key={categoria.id_categoria}
-                                    >
-                                        {categoria.nombre_categoria}
+                        <Col xs="auto">
+                            <Form.Group>
+                                <Form.Label>Categoria</Form.Label>
+                                <Form.Select
+                                    name="id_categoria"
+                                    value={newMaterial.id_categoria}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">
+                                        Seleccione una categoria
                                     </option>
-                                ))}
-                            </Form.Select>
-                        </Form.Group>
-                    </Col>
+                                    {categorias.map((categoria) => (
+                                        <option
+                                            value={categoria.id_categoria}
+                                            key={categoria.id_categoria}
+                                        >
+                                            {categoria.nombre_categoria}
+                                        </option>
+                                    ))}
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
 
-                    <Col xs="auto">
-                        <Button type="submit">Agregar</Button>
-                    </Col>
-                </Row>
-            </Form>
+                        <Col xs="auto">
+                            <Button type="submit">Agregar</Button>
+                        </Col>
+                    </Row>
+                </Form>
 
+                <DataTable
+                    data={formatMateriales(materiales)}
+                    className="table table-striped"
+                    options={{
+                        language: {
+                            search: 'Buscar:',
+                            lengthMenu: 'Mostrar _MENU_ elementos',
+                            info: 'Mostrando _START_ a _END_ de _TOTAL_ elementos',
+                            infoEmpty: 'No se encontraron elementos',
+                            infoFiltered: '(filtrado de _MAX_ elementos totales)',
+                            zeroRecords: 'No se encontraron elementos',
+                            paginate: {
+                                first: 'Primero',
+                                previous: 'Anterior',
+                                next: 'Siguiente',
+                                last: 'Último',
+                            },
+                        },
+                        columns: [
+                            { title: 'Nombre' },
+                            { title: 'Stock' },
+                            { title: 'Precio de compra' },
+                            { title: 'Precio de venta' },
+                            { title: 'Categoria' },
+                            { title: 'Acciones', orderable: false },
+                        ],
+                    }}
+                    slots={{
+                        5: (row) => <div>{row}</div>,
+                    }}
+                ></DataTable>
+
+                <Modal show={showModal} onHide={() => setShowModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Editar Material</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>Nombre</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="nombre_material"
+                                    value={selectedMaterial?.nombre_material || ''}
+                                    onChange={handleEditChange}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Inventario</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="inventario"
+                                    value={selectedMaterial?.inventario || ''}
+                                    onChange={handleEditChange}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Precio de compra</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="precio_compra"
+                                    value={selectedMaterial?.precio_compra || ''}
+                                    onChange={handleEditChange}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Precio de venta</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="precio_venta"
+                                    value={selectedMaterial?.precio_venta || ''}
+                                    onChange={handleEditChange}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Categoria</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    name="id_categoria"
+                                    value={selectedMaterial?.id_categoria || ''}
+                                    onChange={handleEditChange}
+                                >
+                                    <option value="">
+                                        Seleccione una categoria
+                                    </option>
+                                    {categorias.map((categoria) => (
+                                        <option
+                                            value={categoria.id_categoria}
+                                            key={categoria.id_categoria}
+                                        >
+                                            {categoria.nombre_categoria}
+                                        </option>
+                                    ))}
+                                </Form.Control>
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setShowModal(false)}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button variant="primary" onClick={handleUpdate}>
+                            Guardar Cambios
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </Container>
+        )
+    }
+    return (
+        <div style={{paddingLeft:'5%', paddingRight:'5%'}}>
+            <h1>Materiales</h1>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="nombre_material"
+                    value={newMaterial.nombre_material}
+                    onChange={handleChange}
+                    placeholder="Nombre"
+                    required
+                />
+                <input
+                    type="number"
+                    name="inventario"
+                    value={newMaterial.inventario}
+                    onChange={handleChange}
+                    placeholder="Inventario"
+                    required
+                />
+                <input
+                    type="number"
+                    name="precio_compra"
+                    value={newMaterial.precio_compra}
+                    onChange={handleChange}
+                    placeholder="Precio de Compra"
+                    required
+                />
+                <input
+                    type="number"
+                    name="precio_venta"
+                    value={newMaterial}
+                    onChange={handleChange}
+                    placeholder="Precio de Venta"
+                    required
+                />
+                <select
+                    name="id_categoria"
+                    value={newMaterial.id_categoria}
+                    onChange={handleChange}
+                    required
+                >
+                    <option value="">Seleccione una categoria</option>
+                    {categorias.map((cat) => (
+                        <option value={cat.id_categoria}>{cat.nombre_categoria}</option>
+                    ))}
+                </select>
+                <button type="submit" className="btn btn-primary">
+                    Agregar
+                </button>
+            </form>
             <DataTable
                 data={formatMateriales(materiales)}
                 className="table table-striped"
                 options={{
-                    language: {
-                        search: 'Buscar:',
-                        lengthMenu: 'Mostrar _MENU_ elementos',
-                        info: 'Mostrando _START_ a _END_ de _TOTAL_ elementos',
-                        infoEmpty: 'No se encontraron elementos',
-                        infoFiltered: '(filtrado de _MAX_ elementos totales)',
-                        zeroRecords: 'No se encontraron elementos',
-                        paginate: {
-                            first: 'Primero',
-                            previous: 'Anterior',
-                            next: 'Siguiente',
-                            last: 'Último',
-                        },
-                    },
                     columns: [
+                        { title: 'Id' },
                         { title: 'Nombre' },
-                        { title: 'Stock' },
-                        { title: 'Precio de compra' },
-                        { title: 'Precio de venta' },
+                        { title: 'Inventario' },
+                        { title: 'Precio de Compra' },
+                        { title: 'Precio de Venta' },
                         { title: 'Categoria' },
                         { title: 'Acciones', orderable: false },
                     ],
                 }}
                 slots={{
-                    5: (row) => <div>{row}</div>,
+                    6: (row) => <td>{row}</td>,
                 }}
             ></DataTable>
-
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Editar Material</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
+                        <Form.Group>
+                            <Form.Label>Id</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="id_material"
+                                value={selectedMaterial?.id_material || ''}
+                                onChange={handleEditChange}
+                                disabled
+                            />
+                        </Form.Group>
                         <Form.Group>
                             <Form.Label>Nombre</Form.Label>
                             <Form.Control
@@ -259,44 +419,38 @@ const Materiales = () => {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Precio de compra</Form.Label>
+                            <Form.Label>Precio de Compra</Form.Label>
                             <Form.Control
-                                type="number"
+                                type="text"
                                 name="precio_compra"
                                 value={selectedMaterial?.precio_compra || ''}
                                 onChange={handleEditChange}
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Precio de venta</Form.Label>
+                            <Form.Label>Precio de Venta</Form.Label>
                             <Form.Control
-                                type="number"
-                                name="precio_venta"
+                                type="text"
+                                name="precio_compra"
                                 value={selectedMaterial?.precio_venta || ''}
                                 onChange={handleEditChange}
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Categoria</Form.Label>
+                            <Form.Label>Rol</Form.Label>
                             <Form.Control
                                 as="select"
                                 name="id_categoria"
                                 value={selectedMaterial?.id_categoria || ''}
                                 onChange={handleEditChange}
                             >
-                                <option value="">
-                                    Seleccione una categoria
-                                </option>
-                                {categorias.map((categoria) => (
-                                    <option
-                                        value={categoria.id_categoria}
-                                        key={categoria.id_categoria}
-                                    >
-                                        {categoria.nombre_categoria}
-                                    </option>
+                                <option value="">Seleccione una categoria</option>
+                                {categorias.map((cat) => (
+                                    <option value={cat.id_categoria}>{cat.nombre_categoria}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
+
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -311,8 +465,7 @@ const Materiales = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </Container>
+        </div>
     )
-}
 }
 export default Materiales

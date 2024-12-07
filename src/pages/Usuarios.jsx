@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-bs5';
-import { userService } from '../services/api.js'; 
+import { userService } from '../services/api.js';
 import { Modal, Button, Form } from 'react-bootstrap'
 import './Usuarios.css';
 
@@ -37,8 +37,8 @@ const Usuarios = () => {
   };
   const handleEditChange = (e) => {
     setSelectedUsuario({
-        ...selectedUsuario,
-        [e.target.name]: e.target.value,
+      ...selectedUsuario,
+      [e.target.name]: e.target.value,
     })
   }
 
@@ -66,18 +66,18 @@ const Usuarios = () => {
 
   const handleUpdate = (rut) => {
     userService.update(selectedUsuario.rut, selectedUsuario).then((res) => {
-       window.location.reload()
+      window.location.reload()
     });
   };
 
   const openEditModal = (usuario) => {
     setSelectedUsuario(usuario)
     setShowModal(true)
-}
+  }
 
   function formatUsuarios(data) {
     if (!data || !Array.isArray(data)) return []; // Validación de datos
-    
+
     return data.map((usuario) => [
       usuario.rut,
       usuario.str_nombre,
@@ -90,13 +90,13 @@ const Usuarios = () => {
         <Button
           variant="danger"
           onClick={() => handleDelete(usuario.rut)}
-      >
+        >
           Eliminar
         </Button>
         <Button
           variant="primary"
           onClick={() => openEditModal(usuario)}
-      >
+        >
           Editar
         </Button>
       </div>,
@@ -104,7 +104,7 @@ const Usuarios = () => {
   }
 
   return (
-    <div>
+    <div style={{paddingLeft:'5%', paddingRight:'5%'}}>
       <h1>Usuarios</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -186,88 +186,88 @@ const Usuarios = () => {
           ],
         }}
         slots={{
-            6: (row) => <td>{row}</td>,
+          6: (row) => <td>{row}</td>,
         }}
       ></DataTable>
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Editar Usuario</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group>
-                            <Form.Label>RUT</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="rut"
-                                value={selectedUsuario?.rut || ''}
-                                onChange={handleEditChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Nombre</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="nombre_usuario"
-                                value={selectedUsuario?.str_nombre || ''}
-                                onChange={handleEditChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Correo</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="mail"
-                                value={selectedUsuario?.mail || ''}
-                                onChange={handleEditChange}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Rol</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="rol"
-                                value={selectedUsuario?.rol || ''}
-                                onChange={handleEditChange}
-                            > 
-                                <option value="">Seleccione un rol</option>
-                                <option value="cliente">Cliente</option>
-                                <option value="jefe">Jefe</option>
-                                <option value="trabajador">Trabajador</option>
-                                </Form.Control>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Direccion</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="str_dir"
-                                value={selectedUsuario?.str_dir || ''}
-                                onChange={handleEditChange}
-                            />        
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>ID comuna</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="id_co"
-                                value={selectedUsuario?.id_co || ''}
-                                onChange={handleEditChange}
-                            />        
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => setShowModal(false)}
-                    >
-                        Cancelar
-                    </Button>
-                    <Button variant="primary" onClick={handleUpdate}>
-                        Guardar Cambios
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+        <Modal.Header closeButton>
+          <Modal.Title>Editar Usuario</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group>
+              <Form.Label>RUT</Form.Label>
+              <Form.Control
+                type="text"
+                name="rut"
+                value={selectedUsuario?.rut || ''}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control
+                type="text"
+                name="nombre_usuario"
+                value={selectedUsuario?.str_nombre || ''}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Correo</Form.Label>
+              <Form.Control
+                type="text"
+                name="mail"
+                value={selectedUsuario?.mail || ''}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Rol</Form.Label>
+              <Form.Control
+                as="select"
+                name="rol"
+                value={selectedUsuario?.rol || ''}
+                onChange={handleEditChange}
+              >
+                <option value="">Seleccione un rol</option>
+                <option value="cliente">Cliente</option>
+                <option value="jefe">Jefe</option>
+                <option value="trabajador">Trabajador</option>
+              </Form.Control>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Direccion</Form.Label>
+              <Form.Control
+                type="text"
+                name="str_dir"
+                value={selectedUsuario?.str_dir || ''}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>ID comuna</Form.Label>
+              <Form.Control
+                type="number"
+                name="id_co"
+                value={selectedUsuario?.id_co || ''}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowModal(false)}
+          >
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={handleUpdate}>
+            Guardar Cambios
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
