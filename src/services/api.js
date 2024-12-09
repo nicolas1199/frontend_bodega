@@ -51,8 +51,8 @@ export const comunasService = {
 export const userService = {
     create: (newUsuario) => api.post('/loged/usuarios/create', newUsuario),
     getAll: () => api.get('/loged/usuarios'),
-    update: (rut, updatedUsuario) =>
-        api.put(`/loged/usuarios/update/${rut}`, updatedUsuario),
+    update: (updatedUsuario) =>
+        api.put(`/loged/usuarios/update`, updatedUsuario),
     delete: (rut) => api.delete(`/loged/usuarios/delete/${rut}`),
 }
 

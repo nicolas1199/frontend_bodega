@@ -64,14 +64,18 @@ const Usuarios = () => {
 
   const handleDelete = (rut) => {
     userService.delete(rut).then(() => {
-      setUsuarios(usuarios.filter((usuario) => usuario.rut !== rut))
+      setUsuarios(
+        usuarios.filter((usuario) => usuario.rut !== rut))
     })
   }
 
   const handleUpdate = (rut) => {
-    userService.update(selectedUsuario.rut, selectedUsuario).then((res) => {
-      window.location.reload()
-    })
+    userService.update(selectedUsuario)
+      .then((res) => {
+        window.location.reload()
+      }).catch((error) => {
+        console.error(error);
+      })
   }
 
   const openEditModal = (usuario) => {
@@ -218,13 +222,14 @@ const Usuarios = () => {
                 name="rut"
                 value={selectedUsuario?.rut || ''}
                 onChange={handleEditChange}
+                disabled
               />
             </Form.Group>
             <Form.Group>
               <Form.Label>Nombre</Form.Label>
               <Form.Control
                 type="text"
-                name="nombre_usuario"
+                name="str_nombre"
                 value={selectedUsuario?.str_nombre || ''}
                 onChange={handleEditChange}
               />
@@ -262,13 +267,18 @@ const Usuarios = () => {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>ID comuna</Form.Label>
+              <Form.Label>Comuna</Form.Label>
               <Form.Control
-                type="number"
+                as="select"
                 name="id_co"
                 value={selectedUsuario?.id_co || ''}
                 onChange={handleEditChange}
-              />
+              >
+                <option value="">Seleccione una comuna</option>
+                {comunas.map((co) => (
+                  <option value={co.id_co}>{co.str_co}</option>
+                ))}
+              </Form.Control>
             </Form.Group>
           </Form>
         </Modal.Body>
