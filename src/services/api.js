@@ -45,7 +45,7 @@ export const categoriaService = {
 }
 
 export const comunasService = {
-    getAll: () => api.get('/comunas')
+    getAll: () => api.get('/comunas'),
 }
 
 export const userService = {
@@ -57,7 +57,7 @@ export const userService = {
 }
 
 export const sessionService = {
-    getSession: (sessionID) => api.post('/loged/session', { sessionID }),
+    getSession: () => api.get('/loged/session'),
 }
 
 export const obtenerUsuarios = async () => {

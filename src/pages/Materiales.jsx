@@ -3,7 +3,15 @@ import { matService } from '../services/api.js'
 import { categoriaService } from '../services/api.js'
 import DataTable from 'datatables.net-react'
 import DT from 'datatables.net-bs5'
-import { Modal, Button, Form, Row, Col, Container, FormControl } from 'react-bootstrap'
+import {
+    Modal,
+    Button,
+    Form,
+    Row,
+    Col,
+    Container,
+    FormControl,
+} from 'react-bootstrap'
 
 DataTable.use(DT)
 
@@ -99,27 +107,27 @@ const Materiales = () => {
             material.precio_venta,
             material.nombre_categoria,
             <div className="d-flex gap-2">
-            <div className="d-flex gap-2">
-                <Button
-                    variant="primary"
-                    onClick={() => openEditModal(material)}
-                >
-                    Editar
-                </Button>
+                <div className="d-flex gap-2">
+                    <Button
+                        variant="primary"
+                        onClick={() => openEditModal(material)}
+                    >
+                        Editar
+                    </Button>
 
-                <Button
-                    variant="danger"
-                    onClick={() => handleDelete(material.id_material)}
-                >
-                    Eliminar
-                </Button>
+                    <Button
+                        variant="danger"
+                        onClick={() => handleDelete(material.id_material)}
+                    >
+                        Eliminar
+                    </Button>
+                </div>
             </div>,
-            </div>
         ])
     }
     const editMaterial = (id) => {
         return (
-            <Container style={{ maxWidth: '99%' }}>
+            <Container>
                 <h1>Materiales</h1>
                 <Form onSubmit={handleSubmit}>
                     <Row className="align-items-end">
@@ -325,7 +333,7 @@ const Materiales = () => {
                             />
                         </Form.Group>
                     </Col>
-                    <Col xs='auto'>
+                    <Col xs="auto">
                         <FormControl
                             type="number"
                             name="inventario"
@@ -335,7 +343,7 @@ const Materiales = () => {
                             required
                         />
                     </Col>
-                    <Col xs='auto'>
+                    <Col xs="auto">
                         <FormControl
                             type="number"
                             name="precio_compra"
@@ -345,7 +353,7 @@ const Materiales = () => {
                             required
                         />
                     </Col>
-                    <Col xs='auto'>
+                    <Col xs="auto">
                         <FormControl
                             type="number"
                             name="precio_venta"
@@ -355,7 +363,7 @@ const Materiales = () => {
                             required
                         />
                     </Col>
-                    <Col xs='auto'>
+                    <Col xs="auto">
                         <Form.Select
                             name="id_categoria"
                             value={newMaterial.id_categoria}
@@ -364,7 +372,9 @@ const Materiales = () => {
                         >
                             <option value="">Seleccione una categoria</option>
                             {categorias.map((cat) => (
-                                <option value={cat.id_categoria}>{cat.nombre_categoria}</option>
+                                <option value={cat.id_categoria}>
+                                    {cat.nombre_categoria}
+                                </option>
                             ))}
                         </Form.Select>
                     </Col>

@@ -7,29 +7,20 @@ import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap'
 const Navigation = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['sessionID'])
     const [sesion, setSesion] = useState(false)
+    const [user, setUser] = useState(null)
+    const [rol, setRol] = useState(null)
     const navigate = useNavigate()
 
     useEffect(() => {
         const checkSession = async () => {
             try {
-                let sessionID = cookies.sessionID
+                const response = await sessionService.getSession()
+                const user = response.data.user
 
-                if (sessionID && sessionID.startsWith('s:')) {
-                    sessionID = sessionID.slice(2).split('.')[0]
-                }
-
-                console.log('sessionID procesado:', sessionID)
-
-                if (sessionID) {
-                    const sessionData = await sessionService.getSession(
-                        sessionID
-                    )
-
-                    if (sessionData) {
-                        setSesion(true)
-                    } else {
-                        setSesion(false)
-                    }
+                if (user) {
+                    setSesion(true)
+                    setUser(user.mail)
+                    setRol(user.rol)
                 } else {
                     setSesion(false)
                 }
@@ -54,46 +45,48 @@ const Navigation = () => {
     }
 
     return (
-        <div>
-            <Navbar
-                className="--bs-primary-bg-subtle"
-                expand="lg"
-                style={{ paddingLeft: '5%', paddingRight: '5%' }}
-            >
-                <Navbar.Brand as={Link} to="/">
-                    Bodega
-                </Navbar.Brand>
-                <Navbar.Toggle aria-controls="navbarNav" />
-                <Navbar.Collapse id="navbarNav">
-                    <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/">
-                            Inicio
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/materiales">
-                            Materiales
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/usuarios">
-                            Usuarios
-                        </Nav.Link>
-                    </Nav>
-                    <Nav className="ms-auto">
-                        {sesion ? (
-                            <Nav.Link
-                                as={Button}
-                                variant="link"
-                                onClick={logout}
-                            >
+        <Navbar
+            className="nav"
+            expand="lg"
+            style={{ paddingLeft: '1%', paddingRight: '1%' }}
+        >
+            <Navbar.Brand className="text-white" as={Link} to="/">
+                Bodega
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="navbarNav" />
+            <Navbar.Collapse id="navbarNav">
+                <Nav className="me-auto">
+                    <Nav.Link className="text-white" as={Link} to="/">
+                        Inicio
+                    </Nav.Link>
+                </Nav>
+                <Nav className="ms-auto">
+                    {sesion ? (
+                        <NavDropdown title="Usuarios" align="end">
+                            <NavDropdown.ItemText>
+                                {user}
+                                {rol === 'admin' ? ' (Administrador)' : ''}
+                                {rol === 'cliente' ? ' (Usuario)' : ''}
+                            </NavDropdown.ItemText>
+
+                            <NavDropdown.Item as={Link} to="/perfil">
+                                Perfil
+                            </NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/ajustes">
+                                Ajustes
+                            </NavDropdown.Item>
+                            <NavDropdown.Item onClick={logout}>
                                 Cerrar sesión
-                            </Nav.Link>
-                        ) : (
-                            <Nav.Link as={Link} to="/login">
-                                Iniciar sesión
-                            </Nav.Link>
-                        )}
-                    </Nav>
-                </Navbar.Collapse>
-            </Navbar>
-        </div>
+                            </NavDropdown.Item>
+                        </NavDropdown>
+                    ) : (
+                        <Nav.Link as={Link} to="/login">
+                            Iniciar sesión
+                        </Nav.Link>
+                    )}
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
     )
 }
 
