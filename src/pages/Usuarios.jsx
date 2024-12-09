@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-bs5';
 import { comunasService, userService } from '../services/api.js';
-import { Modal, Button, Form } from 'react-bootstrap'
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap'
 import './Usuarios.css'
 
 DataTable.use(DT)
@@ -115,72 +115,87 @@ const Usuarios = () => {
     <div style={{ paddingLeft: '5%', paddingRight: '5%' }}>
       <h1>Usuarios</h1>
       <Form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="rut"
-          value={newUsuario.rut}
-          onChange={handleChange}
-          placeholder="RUT"
-          required
-        />
-        <input
-          type="text"
-          name="str_nombre"
-          value={newUsuario.str_nombre}
-          onChange={handleChange}
-          placeholder="Nombre"
-          required
-        />
-        <input
-          type="email"
-          name="mail"
-          value={newUsuario.mail}
-          onChange={handleChange}
-          placeholder="Correo"
-          required
-        />
-        <input
-          type="password"
-          name="clave"
-          value={newUsuario.clave}
-          onChange={handleChange}
-          placeholder="Clave"
-          required
-        />
-        <select
-          name="rol"
-          value={newUsuario.rol}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Seleccione un rol</option>
-          <option value="cliente">Cliente</option>
-          <option value="jefe">Jefe</option>
-          <option value="trabajador">Trabajador</option>
-        </select>
-        <input
-          type="text"
-          name="str_dir"
-          value={newUsuario.str_dir}
-          onChange={handleChange}
-          placeholder="Dirección"
-          required
-        />
-        <select
-          name="id_co"
-          value={newUsuario.id_co}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Seleccione una comuna</option>
-          {comunas.map((co) => (
-            <option value={co.id_co}>{co.str_co}</option>
-          ))}
-        </select>
+        <Row>
+          <Col xs='auto'>
+            <Form.Group>
+              <Form.Control type="text"
+                name="rut"
+                value={newUsuario.rut}
+                onChange={handleChange}
+                placeholder="RUT"
+                required />
+            </Form.Group>
+          </Col>
+          <Col xs='auto'>
+            <Form.Group>
+              <Form.Control type="text"
+                name="str_nombre"
+                value={newUsuario.str_nombre}
+                onChange={handleChange}
+                placeholder="Nombre"
+                required />
+            </Form.Group>
+          </Col>
+          <Col xs='auto'>
+            <Form.Group>
+              <Form.Control type="email"
+                name="mail"
+                value={newUsuario.mail}
+                onChange={handleChange}
+                placeholder="Correo"
+                required />
+            </Form.Group>
+          </Col>
+          <Col xs='auto'>
+            <Form.Group>
+              <Form.Control type="password"
+                name="clave"
+                value={newUsuario.clave}
+                onChange={handleChange}
+                placeholder="Clave"
+                required />
+            </Form.Group>
+          </Col>
+          <Col xs='auto'>
+            <Form.Select name="rol"
+              value={newUsuario.rol}
+              onChange={handleChange}
+              required>
+              <option value="">Seleccione un rol</option>
+              <option value="cliente">Cliente</option>
+              <option value="jefe">Jefe</option>
+              <option value="trabajador">Trabajador</option>
+            </Form.Select>
+          </Col>
+          <Col xs='auto'>
+            <Form.Group>
+              <Form.Control type="text"
+                name="str_dir"
+                value={newUsuario.str_dir}
+                onChange={handleChange}
+                placeholder="Dirección"
+                required />
 
-        <button type="submit" className="btn btn-primary">
-          Agregar
-        </button>
+            </Form.Group>
+          </Col>
+          <Col xs='auto'>
+            <Form.Group>
+              <Form.Select name="id_co"
+                value={newUsuario.id_co}
+                onChange={handleChange}
+                required>
+                <option value="">Seleccione una comuna</option>
+                {comunas.map((co) => (
+                  <option value={co.id_co}>{co.str_co}</option>
+                ))}
+              </Form.Select>
+
+            </Form.Group>
+          </Col>
+          <Col xs="auto">
+            <Button type="submit">Agregar</Button>
+          </Col>
+        </Row>
       </Form>
 
       <DataTable
