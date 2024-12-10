@@ -59,6 +59,7 @@ const Usuarios = () => {
         str_dir: '',
         id_co: '',
       })
+      window.location.reload()
     })
   }
 
