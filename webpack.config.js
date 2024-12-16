@@ -41,7 +41,7 @@ export default {
         static: {
             directory: path.join(__dirname, 'dist'),
         },
-        port: 3001,
+        port: import.meta.env.PORT || 3001,
         open: true,
         historyApiFallback: true,
     },
