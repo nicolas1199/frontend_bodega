@@ -34,9 +34,7 @@ export default {
         new HtmlWebpackPlugin({
             template: './src/index.html',
         }),
-        new Dotenv({
-            path: './.env',
-        }),
+        new Dotenv(),
     ],
     resolve: {
         extensions: ['.js', '.jsx'],
@@ -45,11 +43,10 @@ export default {
         static: {
             directory: path.join(__dirname, 'dist'),
         },
-        port: 1643,
+        host: '0.0.0.0',
+        port: 3001,
         open: true,
         historyApiFallback: true,
+        allowedHosts: 'all',
     },
 }
-
-console.log('process.env.PORT:', process.env.PORT)
-console.log('process.env.BASE_URL:', process.env.BASE_URL)
