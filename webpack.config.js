@@ -43,7 +43,7 @@ export default {
         static: {
             directory: path.join(__dirname, 'dist'),
         },
-        port: process.env.PORT || 3001,
+        port: Number(process.env.PORT) || 3001,
         open: true,
         historyApiFallback: true,
     },
