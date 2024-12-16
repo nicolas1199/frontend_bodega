@@ -45,7 +45,7 @@ export default {
         static: {
             directory: path.join(__dirname, 'dist'),
         },
-        port: 'http://146.83.198.35:1643',
+        port: 1643,
         open: true,
         historyApiFallback: true,
     },
